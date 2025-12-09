@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donkies</title>
+    <link rel="stylesheet" href="{{ url_for('serve_assets', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('serve_assets', filename='css/media.css') }}">
+    <link rel="stylesheet" href="{{ url_for('serve_assets', filename='css/section2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('serve_assets', filename='css/inbox_user.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('serve_assets', filename='css/inbox_user.css') }}">
+</head>
+<body>
+  <!-- navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">DONKIES</div>
+        <div class="navbar-center">
+            <a href="/" class="nav-home">HOME</a>
+            <a href="/#about-section" class="nav-about">ABOUT</a>
+            <a href="/products" class="nav-products">PRODUCTS</a>
+            <a href="/#gallery-wrapper" class="nav-media">MEDIA</a>
+            {% if session.customer_id %}
+                <a href="/acc/myACC/my_account.html" class="nav-account active">myACCOUNT</a>
+            {% else %}
+                <a href="/login" class="nav-account">myACCOUNT</a>
+            {% endif %}
+        </div>
+        <div class="navbar-right">
+            {% if session.customer_id %}
+                <a href="/logout" class="nav-logout highlight">LOGOUT</a>
+            {% else %}
+                <a href="/login" class="nav-login highlight">LOGIN</a>
+            {% endif %}
+        </div>
+    </nav>
+  <!-- section1 -->
+  <div class="content">
+      <h1>DONKIES</h1>
+  </div>
+  <div class="video-section">
+      <video autoplay muted loop class="video-background">
+          <source src="{{ url_for('serve_assets', filename='anhmedia/1.mp4') }}" type="video/mp4">
+          Your browser does not support the video tag.
+      </video>
+      <div class="video-overlay">
+          <p>A coffee a day make your sleep away</p>
+          <a href="{{ url_for('products_user') }}" class="video-button">CHECK PRODUCTS →</a>
+      </div>
+  </div>
+  <div class="box-about-section" id="about-section">
+    <div class="about-section">
+      <div class="about-content">
+          <h1>ABOUT US</h1>
+          <p>Welcome to Dunkies, where every cup tells a story. Born from a passion for bold flavors and cozy vibes, we're more than just a coffee shop—we're your daily escape. Our beans are sourced from the finest farms, roasted to perfection, and brewed with love to kickstart your day.</p>
+          <p>At Dunkies, we believe in keeping it real. Whether you're grabbing a quick espresso or lingering over a latte with friends, our space is designed to feel like home. Join us, sip the magic, and let's make every moment buzz with energy!</p>
+          <a href="{{ url_for('products_user') }}" class="check-products-btn">CHECK PRODUCTS →</a>
+      </div>
+      <div class="h-contain">
+          <h2>Bold Brew</h2>
+          <h2>Bright Vibes</h2>
+      </div>
+    </div>
+  </div>
+  <!-- section2 -->
+  <div class="coffee-section2">
+    <h1 class="ht">OUR PRODUCTS</h1>
+    <h1 class="title2">Take a glance for your perfect flavor</h1>
+    <nav class="menu2">
+        <button class="active2">COFFEES</button>
+        <button>COLD DRINKS</button>
+        <button>TEAS</button>
+        <button>YOURGUTS</button>
+        <button>FOODS</button>
+        <button>SPECIALS</button>
+    </nav>
+    <div class="container2">
+        <div></div>
+        <div class="text-section2">
+            <h1>COFFEE</h1>
+            <p>Discover the magic of coffee—crafted from premium roasted beans, bursting with bold flavors and invigorating caffeine. From silky cappuccinos to refreshing cold brews, every sip is an experience. Join us in our cozy café vibe, where rich aromas and perfect brews create moments to savor!</p>
+            <a href="{{ url_for('products_user') }}" class="shop-button2">GO TO SHOPPING →</a>
+        </div>
+        <div class="image-section2">
+            <img src="{{ url_for('serve_assets', filename='our_product_img/coffee.png') }}" alt="Coffee being poured">
+        </div>
+    </div>
+  </div>
+  <!-- testimonial -->
+  <section class="testimonial-section">
+    <h2 class="section-title">WHAT OUR CUSTOMER SAY</h2>
+    <div class="testimonial-card">
+        <button class="nav-arrow left-arrow">←</button>
+        <div class="testimonial-content">
+            <img src="{{ url_for('serve_assets', filename='logo2.png') }}" alt="Quote Icon" class="quote-icon">
+            <p class="quote">"Use this space to share a testimonial quote about the business, its products or its services. Insert a quote from a real customer or client here to build trust and win over site visitors."</p>
+            <p class="author">HALIT KEIGAD, FL</p>
+        </div>
+        <button class="nav-arrow right-arrow">→</button>
+    </div>
+  </section>
+  <!-- media -->
+  <div class="gallery-wrapper" id="gallery-wrapper">
+    <div class="section-memories">
+      <h2>MEDIA</h2>
+      <p class="title">SOME MEMORIES</p>
+      <div class="container">
+        <div class="column">
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh1.jpg') }}" alt="Image 1"></div>
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh4.jpg') }}" alt="Image 4"></div>
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh7.jpg') }}" alt="Image 7"></div>
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh10.jpg') }}" alt="Image 10"></div>
+        </div>
+        <div class="column">
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh2.jpg') }}" alt="Image 2"></div>
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh5.jpg') }}" alt="Image 5"></div>
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh8.jpg') }}" alt="Image 8"></div>
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh11.jpg') }}" alt="Image 11"></div>
+        </div>
+        <div class="column">
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh3.jpg') }}" alt="Image 3"></div>
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh6.jpg') }}" alt="Image 6"></div>
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh9.jpg') }}" alt="Image 9"></div>
+          <div class="gallery-item"><img src="{{ url_for('serve_assets', filename='anhmedia/anh12.jpg') }}" alt="Image 12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="imageModal">
+      <span class="modal-close">×</span>
+      <span class="modal-zoom">⤢</span>
+      <span class="modal-prev">≪</span>
+      <span class="modal-next">≫</span>
+      <img class="modal-content" id="modalImage">
+    </div>
+    <div class="section-donkies">
+      <div class="donkies-video-scroll">
+        <video autoplay muted loop playsinline>
+          <source src="{{ url_for('serve_assets', filename='anhmedia/videocaphe.mp4') }}" type="video/mp4">
+        </video>
+      </div>
+      <div class="donkies-wrapper">
+        <div class="donkies-text">DONKIES</div>
+        <img class="donkies-img" src="{{ url_for('serve_assets', filename='anhmedia/anhlogotron.png') }}" alt="anhlogotron">
+      </div>
+    </div>
+  </div>
+  {% if session.customer_id %}
+<!-- chatbox -->
+<div class="chat-container">
+    <div class="card" id="chatBox">
+      <div class="chat-header">Chat</div>
+      <div class="chat-window">
+        <ul class="message-list" id="messageList"></ul>
+      </div>
+      <div class="chat-input">
+        <input type="text" class="message-input" id="messageInput" placeholder="Type your message here">
+        <button class="send-button" id="sendButton">Send</button>
+      </div>
+    </div>
+
+    <div class="chat-icon" id="chatIcon">
+      <div class="background"></div>
+      <svg viewBox="0 0 100 100" height="80" width="80" class="chat-bubble">
+        <g class="bubble">
+          <path d="M 30.7873,85.113394 30.7873,46.556405 C 30.7873,41.101961 36.826342,35.342 40.898074,35.342 H 59.113981 C 63.73287,35.342 69.29995,40.103201 69.29995,46.784744" class="line line1"></path>
+          <path d="M 13.461999,65.039335 H 58.028684 C 63.483128,65.039335 69.243089,59.000293 69.243089,54.928561 V 45.605853 C 69.243089,40.986964 65.02087,35.419884 58.339327,35.419884" class="line line2"></path>
+        </g>
+        <circle cx="42.5" cy="50.7" r="1.9" class="circle circle1"></circle>
+        <circle r="1.9" cy="50.7" cx="49.9" class="circle circle2"></circle>
+        <circle cx="57.3" cy="50.7" r="1.9" class="circle circle3"></circle>
+      </svg>
+    </div>
+</div>
+{% endif %}
+  <!-- footer -->
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-left">
+        <h1>DONKIES <img src="{{ url_for('serve_assets', filename='logo2.png') }}" alt="star icon" class="star-icon"></h1>
+      </div>
+      <div class="footer-center">
+        <ul>
+          <li><a href="{{ url_for('index') }}">HOME</a></li>
+          <li><a href="{{ url_for('index') }}#about-section">ABOUT</a></li>
+          <li><a href="{{ url_for('products_user') }}">PRODUCTS</a></li>
+          <li><a href="{{ url_for('index') }}#gallery-wrapper">MEDIA</a></li>
+          <li><a href="{{ url_for('my_account') }}">myACCOUNT</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">
+        <p>ABC@GMAIL.COM</p>
+        <p>123-456-7890</p>
+        <p>123 HAI BA TRUNG</p>
+        <p>DONG DA, HA NOI</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="social-icons">
+        <a href="#" class="icon-circle"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="icon-circle"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="icon-circle"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="icon-circle"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+      <div class="footer-links">
+        <a href="{{ url_for('serve_assets', filename='privacy.html') }}">Privacy Policy</a>
+        <a href="{{ url_for('serve_assets', filename='privacy.html') }}">Accessibility Statement</a>
+      </div>
+      <div class="copyright">
+        © 2025 by G2 vo dich.
+      </div>
+    </div>
+  </footer>
+  
+  <script src="{{ url_for('serve_assets', filename='js/navbar.js') }}"></script>
+  <script src="{{ url_for('serve_assets', filename='js/media.js') }}"></script>
+  <script src="{{ url_for('serve_assets', filename='js/menu2.js') }}"></script>
+  <script src="{{ url_for('serve_assets', filename='js/testimonial.js') }}"></script>
+  <script src="{{ url_for('serve_assets', filename='js/inbox_user.js') }}"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+</body>
+</html>

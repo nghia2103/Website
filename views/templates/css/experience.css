@@ -1,0 +1,138 @@
+.review-form-containerex {
+  background-color: #d4e157;
+  padding: 20px;
+  text-align: left;
+  color: #000;
+  width: 50vw;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 1.2rem;
+}
+
+.review-form-containerex h2 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.name-sectionex, .contact-sectionex {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.name-sectionex div, .contact-sectionex div {
+  flex: 1;
+}
+
+.name-sectionex label, .contact-sectionex label {
+  font-size: 1rem;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.name-sectionex input, .contact-sectionex input {
+  width: 100%;
+  padding: 5px;
+  background-color: #d4e157;
+  border: none;
+  border-bottom: 1px solid #000000;
+  font-size: 1rem;
+  color: #000000;
+  box-sizing: border-box;
+}
+
+.name-sectionex input:focus, .contact-sectionex input:focus {
+  outline: none;
+  border-bottom: 1px solid #000000;
+  caret-color: #000;
+}
+
+.phone-inputex {
+  display: block;
+}
+
+.phone-wraperex {
+  display: block;
+  width: 100%; /* Ensure the wrapper takes full width of its parent */
+}
+
+.phone-inputex input[type="tel"] {
+  width: 100%;
+  padding: 5px;
+  background-color: #d4e157;
+  border: none;
+  border-bottom: 1px solid #000000;
+  font-size: 1rem;
+  color: #000000;
+  box-sizing: border-box;
+}
+
+.phone-inputex input[type="tel"]:focus {
+  outline: none;
+  border-bottom: 1px solid #000000;
+  caret-color: #000;
+}
+
+.category-sectionex, .experience-sectionex, .submit-sectionex {
+  margin-bottom: 20px;
+}
+
+.category-gridex {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.category-sectionex .checkbox-labelex {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1.1rem;
+}
+
+.category-sectionex input[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: #d4e157;
+  border: 1px solid #000;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.category-sectionex input[type="checkbox"]:checked {
+  background: #d4e157 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%23000"><path d="M1 5l4 4 6-6" stroke="%23000" stroke-width="2"/></svg>') no-repeat center center;
+  background-size: 12px;
+}
+
+.experience-sectionex textarea {
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  background-color: #d4e157;
+  border: none;
+  border-bottom: 1px solid #000000;
+  font-size: 1rem;
+  color: #000000;
+  box-sizing: border-box;
+}
+
+.experience-sectionex textarea:focus {
+  outline: none;
+  border-bottom: 1px solid #000000;
+  caret-color: #000;
+}
+
+.submit-sectionex button {
+  background-color: #000;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+}

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Out</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts: Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff;
+            font-family: 'Roboto', sans-serif;
+            color: #000;
+        }
+        .checkout-container {
+            margin: 60px auto;
+            max-width: 1200px;
+        }
+        .form-section, .order-summary {
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 0;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .form-section h5, .order-summary h5 {
+            font-weight: 500;
+            font-size: 20px;
+            color: #000;
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
+        }
+        /* Payment Method Styles */
+        .payment-method {
+            margin-top: 20px;
+        }
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #000;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .payment-option:hover {
+            background-color: #f8f9fa;
+        }
+        .payment-option.selected {
+            background-color: #000;
+            color: #fff;
+        }
+        .payment-option.selected .payment-icon {
+            color: #fff;
+        }
+        .payment-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #000;
+        }
+        .payment-details {
+            flex-grow: 1;
+        }
+        .payment-details h6 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .payment-details p {
+            margin: 5px 0 0;
+            font-size: 14px;
+        }
+        .qr-code-container {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px dashed #000;
+        }
+        .qr-code-container img {
+            max-width: 200px;
+            margin-bottom: 15px;
+        }
+        .btn-qr-confirm {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            width: 100%;
+        }
+        .btn-qr-confirm:hover {
+            background-color: #000;
+            opacity: 0.9;
+        }
+        /* Delivery Date Styles */
+        .delivery-date {
+            margin-top: 20px;
+        }
+        .delivery-date label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #000;
+        }
+        .delivery-date input {
+            border: 1px solid #000;
+            border-radius: 0;
+            padding: 8px;
+            width: 100%;
+            font-size: 14px;
+        }
+        /* Order Summary */
+        .order-summary .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #000;
+        }
+        .order-summary .item img {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #000;
+            border-radius: 0;
+            margin-right: 15px;
+        }
+        .order-summary .item-details {
+            flex-grow: 1;
+        }
+        .order-summary .item-details h6 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 500;
+            color: #000;
+        }
+        .order-summary .item-details p {
+            margin: 0;
+            color: #000;
+            font-size: 14px;
+        }
+        .order-summary .quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .order-summary .quantity button {
+            border: 1px solid #000;
+            background: #fff;
+            font-size: 14px;
+            width: 30px;
+            height: 30px;
+            border-radius: 0;
+            color: #000;
+            transition: all 0.3s ease;
+        }
+        .order-summary .quantity button:hover {
+            background-color: #000;
+            color: #fff;
+            opacity: 0.9;
+        }
+        .order-summary .totals {
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        .order-summary .totals div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #000;
+        }
+        .order-summary .totals .total {
+            font-weight: 500;
+            color: #000;
+        }
+        .terms-checkbox {
+            margin-top: 20px;
+        }
+        .terms-checkbox label {
+            font-size: 14px;
+            color: #000;
+        }
+        .terms-checkbox a {
+            color: #000;
+            text-decoration: underline;
+        }
+        .terms-checkbox a:hover {
+            color: #000;
+            opacity: 0.8;
+        }
+        .terms-checkbox .form-check-input {
+            border: 2px solid #000;
+        }
+        .terms-checkbox .form-check-input:checked {
+            background-color: #000;
+            border-color: #000;
+        }
+        .btn-confirm {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 0;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-confirm:hover {
+            background-color: #000;
+            opacity: 0.9;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <div class="row">
+            <!-- Left Section: Payment Method -->
+            <div class="col-md-7">
+                <!-- Payment Method -->
+                <div class="form-section">
+                    <h5>Payment Method</h5>
+                    <div class="payment-method">
+                        <div class="payment-option selected" id="qrPaymentOption">
+                            <div class="payment-icon">
+                                <i class="bi bi-qr-code"></i>
+                            </div>
+                            <div class="payment-details">
+                                <h6>QR Code Payment</h6>
+                                <p>Scan QR code to complete payment</p>
+                            </div>
+                        </div>
+                        <div class="payment-option" id="codPaymentOption">
+                            <div class="payment-icon">
+                                <i class="bi bi-cash"></i>
+                            </div>
+                            <div class="payment-details">
+                                <h6>Cash on Delivery</h6>
+                                <p>Pay when you receive the goods</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- QR Code Section -->
+                    <div class="qr-code-container" id="qrCodeContainer">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://example.com/payment" alt="QR Code">
+                        <p>Scan this QR code to complete your payment</p>
+                        <button class="btn btn-qr-confirm" id="confirmQRBtn">Confirm QR Payment</button>
+                    </div>
+
+                    <!-- Delivery Date Selection -->
+                    <div class="delivery-date">
+                        <label for="deliveryDate">Select Delivery Date</label>
+                        <input type="date" id="deliveryDate" class="form-control" min="2025-06-09">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section: Order Summary -->
+            <div class="col-md-5">
+                <div class="order-summary">
+                    <h5>Order Summary</h5>
+                    <div id="order-summary-111"></div>
+                    <div class="totals">
+                        <div>
+                            <span>Subtotal</span>
+                            <span id="subtotal">₫0</span>
+                        </div>
+                        <div>
+                            <span>Shipping</span>
+                            <span id="shipping">₫0</span>
+                        </div>
+                        <div class="total">
+                            <span>Total (VND)</span>
+                            <span id="total">₫0</span>
+                        </div>
+                    </div>
+                    <div class="terms-checkbox">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="termsCheck">
+                            <label class="form-check-label" for="termsCheck">
+                                I agree with the <a href="#">terms and conditions</a>
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-dark btn-confirm w-100 mt-3">Confirm Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+
+    <!-- JavaScript for Payment Method Selection and Total Calculation -->
+    <script>
+    // Payment Method Selection Logic
+    const qrPaymentOption = document.getElementById('qrPaymentOption');
+    const codPaymentOption = document.getElementById('codPaymentOption');
+    const qrCodeContainer = document.getElementById('qrCodeContainer');
+    const confirmQRBtn = document.getElementById('confirmQRBtn');
+    const deliveryDateInput = document.getElementById('deliveryDate');
+
+    qrPaymentOption.addEventListener('click', () => {
+        qrPaymentOption.classList.add('selected');
+        codPaymentOption.classList.remove('selected');
+        qrCodeContainer.style.display = 'block';
+    });
+
+    codPaymentOption.addEventListener('click', () => {
+        codPaymentOption.classList.add('selected');
+        qrPaymentOption.classList.remove('selected');
+        qrCodeContainer.style.display = 'none';
+    });
+
+    // QR Payment Confirmation
+    confirmQRBtn.addEventListener('click', () => {
+        alert('QR payment confirmed successfully!');
+        console.log('QR Payment confirmed for backend processing');
+        confirmQRBtn.disabled = true; // Disable button after confirmation
+        fetch('/api/card-confirm', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ payment_method: 'qr' })
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => console.log('Card confirm response:', data))
+            .catch(err => console.error('Error confirming QR payment:', err));
+    });
+
+    // Delivery Date Confirmation
+    deliveryDateInput.addEventListener('change', () => {
+        const deliveryDate = deliveryDateInput.value;
+        if (deliveryDate) {
+            fetch('/api/calendar-confirm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ delivery_date: deliveryDate })
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    return res.json();
+                })
+                .then(data => console.log('Delivery date confirmed:', data))
+                .catch(err => console.error('Error confirming delivery date:', err));
+        }
+    });
+
+    // Load cart from server-side data
+    function loadCart() {
+        const products = {{ cart | tojson }}; // Dữ liệu giỏ hàng từ server
+        console.log('Cart data:', products);
+        const container = document.getElementById('order-summary-111');
+        container.innerHTML = ''; // Clear previous
+
+        if (!products || products.length === 0) {
+            container.innerHTML = '<p>Giỏ hàng trống!</p>';
+            updateTotal();
+            return;
+        }
+
+        products.forEach(product => {
+            const item = document.createElement('div');
+            item.className = 'item';
+            item.dataset.cartId = product.cart_id;
+            item.dataset.price = product.discounted_price; // Giá đã áp dụng chiết khấu
+            item.dataset.quantity = product.quantity;
+            item.dataset.productId = product.product_id;
+            item.dataset.sizeId = product.size_id;
+
+            item.innerHTML = `
+                <input type="checkbox" class="select-item" checked data-cart-id="${product.cart_id}">
+                <img src="${product.image_url || 'https://via.placeholder.com/60?text=No+Image'}" alt="${product.product_name}">
+                <div class="item-details">
+                    <h6>${product.product_name}</h6>
+                    <p>${product.size}</p>
+                    <p class="price">₫${(product.discounted_price).toLocaleString('vi-VN')}</p>
+                </div>
+                <div class="quantity">
+                    <button class="decrease">-</button>
+                    <span class="quantity-value">${String(product.quantity).padStart(2, '0')}</span>
+                    <button class="increase">+</button>
+                </div>
+            `;
+
+            // Handle quantity changes
+            item.querySelector('.increase').addEventListener('click', () => {
+                const valueSpan = item.querySelector('.quantity-value');
+                let qty = parseInt(valueSpan.textContent);
+                qty = Math.min(qty + 1, 10); // Giới hạn tối đa 10
+                valueSpan.textContent = String(qty).padStart(2, '0');
+                item.dataset.quantity = qty;
+                updateCartItem(product.cart_id, qty);
+                updateTotal();
+            });
+
+            item.querySelector('.decrease').addEventListener('click', () => {
+                const valueSpan = item.querySelector('.quantity-value');
+                let qty = parseInt(valueSpan.textContent);
+                qty = Math.max(qty - 1, 1); // Giới hạn tối thiểu 1
+                valueSpan.textContent = String(qty).padStart(2, '0');
+                item.dataset.quantity = qty;
+                updateCartItem(product.cart_id, qty);
+                updateTotal();
+            });
+
+            container.appendChild(item);
+        });
+        updateTotal();
+    }
+
+    // Initial cart load
+    loadCart();
+
+    // Function to update cart item quantity
+    function updateCartItem(cartId, quantity) {
+        fetch('/api/cart/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cart_id: cartId, quantity })
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                console.log('Update cart response:', data);
+                if (data.message !== 'Cập nhật giỏ hàng thành công') {
+                    alert('Lỗi khi cập nhật số lượng: ' + (data.error || 'Vui lòng thử lại.'));
+                }
+                updateTotal();
+            })
+            .catch(err => {
+                console.error('Error updating cart:', err);
+                alert('Lỗi khi cập nhật giỏ hàng: ' + err.message);
+            });
+    }
+
+    // Function to calculate and update the total
+    function updateTotal() {
+        let subtotal = 0;
+        const items = document.querySelectorAll('.item');
+        const shipping = parseFloat(document.getElementById('shipping').textContent.replace(/[^\d]/g, '') || 0);
+
+        items.forEach(item => {
+            if (item.querySelector('.select-item').checked) {
+                const price = parseFloat(item.dataset.price) || 0;
+                const quantity = parseInt(item.dataset.quantity) || 0;
+                subtotal += price * quantity;
+            }
+        });
+
+        const total = subtotal + shipping;
+
+        document.getElementById('subtotal').textContent = `₫${subtotal.toLocaleString('vi-VN')}`;
+        document.getElementById('total').textContent = `₫${total.toLocaleString('vi-VN')}`;
+    }
+
+    // Function to prepare order data
+    function getOrderData() {
+        const items = document.querySelectorAll('.item');
+        const orderData = {
+            items: [],
+            subtotal: parseFloat(document.getElementById('subtotal').textContent.replace(/[^\d]/g, '') || 0),
+            shipping: parseFloat(document.getElementById('shipping').textContent.replace(/[^\d]/g, '') || 0),
+            total: parseFloat(document.getElementById('total').textContent.replace(/[^\d]/g, '') || 0),
+            paymentMethod: qrPaymentOption.classList.contains('selected') ? 'qr' : 'cod',
+            paymentConfirmed: qrPaymentOption.classList.contains('selected') ? confirmQRBtn.disabled : true,
+            note: ''
+        };
+
+        items.forEach(item => {
+            if (item.querySelector('.select-item').checked) {
+                const cartId = item.dataset.cartId;
+                const price = parseFloat(item.dataset.price) || 0;
+                const quantity = parseInt(item.dataset.quantity) || 0;
+                const productId = item.dataset.productId;
+                const sizeId = item.dataset.sizeId;
+                orderData.items.push({
+                    cart_id: cartId,
+                    product_id: productId,
+                    size_id: sizeId,
+                    price: price,
+                    quantity: quantity
+                });
+            }
+        });
+
+        return orderData;
+    }
+
+    // Confirm order
+    document.querySelector('.btn-confirm').addEventListener('click', () => {
+  if (!document.getElementById('termsCheck').checked) {
+    alert('Vui lòng đồng ý với các điều khoản và điều kiện!');
+    return;
+  }
+
+  const deliveryDate = deliveryDateInput.value;
+  if (!deliveryDate) {
+    alert('Vui lòng chọn ngày giao hàng!');
+    return;
+  }
+
+  const orderData = getOrderData();
+  if (orderData.items.length === 0) {
+    alert('Vui lòng chọn ít nhất một sản phẩm để thanh toán!');
+    return;
+  }
+
+  if (orderData.paymentMethod === 'qr' && !confirmQRBtn.disabled) {
+    alert('Vui lòng xác nhận thanh toán QR trước!');
+    return;
+  }
+
+  console.log('Sending order data:', orderData);
+
+  fetch('/api/create-order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderData)
+  })
+    .then(res => {
+      if (!res.ok) {
+        return res.json().then(errData => {
+          throw new Error(errData.error || `HTTP error! status: ${res.status}`);
+        });
+      }
+      return res.json();
+    })
+    .then(data => {
+  console.log('Create order response:', data);
+  if (data.message === 'Tạo đơn hàng thành công') {
+    alert('Đơn hàng đã được tạo thành công!');
+    window.location.href = `/products?order_id=${data.order_id}`; // Redirect with order_id
+  } else {
+    alert('Lỗi khi tạo đơn hàng: ' + (data.error || 'Vui lòng thử lại.'));
+    console.error('Error response:', data);
+  }
+})
+    .catch(err => {
+      console.error('Error creating order:', err);
+      alert('Lỗi khi tạo đơn hàng: ' + err.message);
+    });
+});
+</script>
+</body>
+</html>

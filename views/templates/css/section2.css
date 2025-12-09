@@ -1,0 +1,104 @@
+
+.coffee-section2 {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+.container2 {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+}
+.text-section2 {
+    box-sizing: content-box;
+    padding: 20px 50px 20px 20px;
+    width: 38%;
+}
+.text-section2 h1 {
+    font-size: 2em;
+    color: black;
+    margin-bottom: 10px;
+}
+.text-section2 p {
+    font-size: 0.9em;
+    color: black;
+    line-height: 1.5;
+}
+.shop-button2 {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: black;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 20px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+.shop-button2:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid rgb(185, 183, 183);
+}
+.image-section2 {
+    width: 60%;
+}
+.image-section2 img {
+    width: 95%;
+    height: auto;
+    border-radius: 40px;
+    object-fit: cover;
+}
+.coffee-section2 p {
+    font-family: arial, "ｍｓ ｐゴシック", "ms pgothic", "돋움", dotum, helvetica, sans-serif;
+    font-size: 16px;
+}
+.coffee-section2 .menu2 {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 40px;
+    justify-content: flex-start; /* Changed to align left */
+}
+.coffee-section2 .menu2 button {
+    color: #000;
+    font-family: azeret-mono, "azeret mono", monospace;
+    font-size: 0.8rem;
+    font-weight: 300;
+    padding: 8px 20px; /* Adjusted padding for better content fit */
+    height: auto; /* Remove fixed height to fit content */
+    border: 1px solid #000;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: background-color 0.3s, color 0.3s;
+    display: inline-flex; /* Use inline-flex for better text alignment */
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+.coffee-section2 .menu2 button.active2 {
+    background-color: #000;
+    color: #fff;
+}
+.coffee-section2 .menu2 button:hover {
+    background-color: #000;
+    color: #fff;
+}
+.coffee-section2 .title2 {
+    font-family: "Times New Roman", Times, serif;
+    font-style: italic;
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+.coffee-section2 h2{
+    color: black;
+}
+.ht {
+    font-size: 16px;
+    font-family: azeret-mono, "azeret mono", monospace;
+    color: black;
+}
