@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+  body {
+    background-color: #ffffff;
+  }
+
+  /* Navigation Styles from my_address.html */
+  .nav-container22 {
+    font-family: "Azeret Mono", monospace;
+    background-color: #ffffff;
+    padding: 10px 0;
+    margin-bottom: 20px;
+  }
+  .nav-list22 {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+  }
+  .nav-item22 {
+    font-family: "Azeret Mono", monospace;
+  }
+  .nav-link22 {
+    text-decoration: none;
+    color: #000;
+    font-family: "Azeret Mono", monospace;
+    font-size: 16px;
+    padding: 8px 12px;
+    transition: color 0.3s;
+  }
+  .nav-link22:hover {
+    color: rgb(106, 122, 0);
+  }
+  .nav-link22.active {
+    color: rgb(106, 122, 0);
+    font-weight: bold;
+    border-bottom: 2px solid rgb(106, 122, 0);
+  }
+
+  /* Existing Styles */
+  .btn-custom-discard-1 {
+    background-color: #fff3cd;
+    color: #000;
+    border: 1px solid #ffeeba;
+  }
+  .btn-custom-update-1 {
+    background-color: rgb(106, 122, 0);
+    color: #fff;
+  }
+  .profile-img-1 {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+  }
+  .card-1 {
+    border-width: 1px 0 1px 0;
+    border-style: solid;
+    border-color: #ccc;
+    border-radius: 0;
+  }
+  .custom-card-1 {
+    border: 0;
+  }
+  .lock-icon-1 {
+    display: inline-block;
+    margin-left: 10px;
+    cursor: pointer;
+    position: relative;
+  }
+  .lock-icon-1::before {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" class="bi bi-lock" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/></svg>');
+  }
+  .lock-icon-1:hover::before {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(106, 122, 0)" class="bi bi-lock" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/></svg>');
+  }
+  .lock-icon-1:hover .tooltip-1 {
+    visibility: visible;
+    opacity: 1;
+  }
+  .tooltip-1 {
+    visibility: hidden;
+    opacity: 0;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    transition: opacity 0.3s;
+  }
+  .tooltip-1::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+  }
+  .btn-custom-discard-1 {
+    border-radius: 0;
+    border: 1px solid rgb(106, 122, 0);
+    background-color: #ffffff;
+    color: rgb(106, 122, 0);
+  }
+  .btn-custom-discard-1:hover {
+    text-decoration: underline;
+    border-radius: 0;
+    border: 1px solid rgb(106, 122, 0);
+    background-color: #ffffff;
+    color: rgb(106, 122, 0);
+  }
+  .btn-custom-update-1 {
+    border-radius: 0;
+  }
+  .btn-custom-update-1:hover {
+    text-decoration: underline;
+    color: white;
+    background-color: rgb(106, 122, 0);
+  }
+  .form-control-1 {
+    border: 1px solid black;
+    border-radius: 0 !important;
+  }
+  .nav-link-custom-1 {
+    text-decoration: none;
+  }
+  .custom-a-1 {
+    font-family: "Azeret Mono", monospace;
+  }
+  .custom-a-1:hover {
+    text-decoration: none;
+  }
+  .fa-brands::before {
+    width: 24px;
+    height: 24px;
+  }
+  .btn-custom-d9df6d-1 {
+    background-color: #d9df6d;
+  }
+  .custom-background-1 {
+    background-color: #d9df6d;
+  }
+  .custom-title-1 {
+    font-family: Arial Black, sans-serif;
+    font-size: 83px;
+  }
+  .brand-graphic-1 {
+    height: 70px;
+  }
+  .custom-div1-1 {
+    display: inline;
+  }
+  .info-item-1 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  .info-label-1 {
+    font-weight: bold;
+    display: inline;
+  }
+  .info-value-1 {
+    display: inline;
+  }
+  .mb-3-1 {
+    padding-bottom: 10px;
+  }
+  .mb-3-1:last-child {
+    border-bottom: none;
+  }
+  .edit-form-1 {
+    display: none;
+  }
+  .btn-custom-edit-1 {
+    border-radius: 0;
+    border: 1px solid rgb(106, 122, 0);
+    background-color: #ffffff;
+    color: rgb(106, 122, 0);
+    padding: 4px 5px;
+    font-size: 14px;
+    line-height: 1.2;
+    width: 100px;
+    height: 32px;
+  }
+  .btn-custom-edit-1:hover {
+    text-decoration: underline;
+    border: 1px solid rgb(106, 122, 0);
+    background-color: #ffffff;
+    color: rgb(106, 122, 0);
+  }
+  #changePasswordSection {
+    display: none;
+  }
+  /* navbar */
+.navbar-center .nav-home {
+    background-color: white;
+    color: black;
+}
+.navbar {
+    font-family: 'Azeret Mono', Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: transparent;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    width: 100%;
+    box-sizing: border-box;
+    transition: transform 0.3s ease; /* Thêm transition cho hiệu ứng ẩn/hiện */
+}
+
+.navbar.hidden {
+    transform: translateY(-100%); /* Ẩn navbar bằng cách dịch chuyển lên trên */
+}
+
+.navbar-left {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    padding: 8px 16px;
+    z-index: 10000;
+}
+
+.navbar-center {
+    display: flex;
+    gap: 15px;
+    z-index: 10000;
+}
+
+.navbar-center a {
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;
+    padding: 8px 16px;
+    border: 1px solid #000;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.navbar-center a:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
+}
+.navbar-center .active {
+    background-color: black;
+    color: white;
+    border: 1px solid #000;
+}
+
+.navbar-center .active:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
+}
+
+.navbar-right {
+    display: flex;
+    gap: 15px;
+    z-index: 10000;
+}
+
+.navbar-right a {
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;
+    padding: 8px 16px;
+    border: 1px solid #000;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.navbar-right a:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
+}
+
+.navbar-right .highlight {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #000;
+    font-weight: bold;
+}
+
+.navbar-right .highlight:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
+}
+
+/* Updated Footer CSS */
+.footer {
+    padding: 40px;
+    background-color: #d4e157;
+}
+
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.footer-left h1 {
+    padding-top: 60px;
+    font-size: 90px;
+    font-weight: 900;
+    text-align: center;
+    color:black
+}
+
+.star-icon {
+    font-size: 60px;
+    vertical-align: middle;
+}
+
+.footer-center ul {
+    list-style: none;
+    padding: 0;
+    font-size: 14px;
+    text-decoration: none;!important
+    color: black;
+}
+.footer-center a {
+  text-decoration: none;
+  font-family: 'Azeret Mono', Arial, Helvetica, sans-serif;
+  color: black
+}
+.footer-center a:hover {
+  text-decoration: underline;
+}
+.footer-center li {
+    margin: 5px 0;
+}
+
+.footer-right p {
+    font-size: 14px;
+    margin: 5px 0;
+    color: black;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    flex-wrap: wrap;
+    border-top: 1px solid rgb(0, 0, 0);
+    padding-top: 20px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.icon-circle {
+    background-color: black;
+    color: #d4e157;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.icon-circle i {
+    font-size: 16px;
+}
+
+.footer-links a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: black;
+}
+
+.star-icon {
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    animation: rotate360 5s linear infinite;
+}
+
+@keyframes rotate360 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.footer-right {
+    font-family: azeret-mono, "azeret mono", monospace;
+    padding-right: 400px;
+    padding-top: 60px;
+}
+
+.footer-center {
+    font-family: azeret-mono, "azeret mono", monospace;
+    padding-top: 60px;
+}
+  </style>
+</head>
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">DONKIES</div>
+        <div class="navbar-center">
+            <a href="/" class="nav-home">HOME</a>
+            <a href="/#about-section" class="nav-about">ABOUT</a>
+            <a href="/products" class="nav-products">PRODUCTS</a>
+            <a href="/#gallery-wrapper" class="nav-media">MEDIA</a>
+            {% if session.customer_id %}
+                <a href="/acc/myACC/my_account.html" class="nav-account active">myACCOUNT</a>
+            {% else %}
+                <a href="/login" class="nav-account">myACCOUNT</a>
+            {% endif %}
+        </div>
+        <div class="navbar-right">
+            {% if session.customer_id %}
+                <a href="/logout" class="nav-logout highlight">LOGOUT</a>
+            {% else %}
+                <a href="/login" class="nav-login highlight">LOGIN</a>
+            {% endif %}
+        </div>
+    </nav>
+  <div class="container">
+    <!-- Updated Navigation to match my_address.html -->
+    <nav class="nav-container22">
+      <ul class="nav-list22">
+        <li class="nav-item22">
+          <a class="nav-link22 active" href="my_account.html" data-tab="my-account22">My Account</a>
+        </li>
+        <li class="nav-item22">
+          <a class="nav-link22" href="my_order.html" data-tab="my-orders22">My Orders</a>
+        </li>
+                <li class="nav-item22">
+          <a class="nav-link22" href="my_address.html" data-tab="my-addresses22">My Addresses</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Account Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2>Account</h2>
+        <p class="text-muted">View and edit your personal info below.</p>
+      </div>
+    </div>
+
+    <!-- Display Info Section -->
+    <div class="card-1 p-4 mb-4">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="info-item-1">
+            <span class="info-label-1">Display name: </span>
+            <span class="info-value-1" id="displayName">Loading...</span>
+          </div>
+          <div class="info-item-1">
+            <span class="info-label-1">Gmail: </span>
+            <span class="info-value-1" id="gmail">Loading...</span>
+          </div>
+          <div class="info-item-1">
+            <span class="info-label-1">Phone: </span>
+            <span class="info-value-1" id="phone"></span>
+          </div>
+          <div class="info-item-1">
+            <span class="info-label-1">Birthdate: </span>
+            <span class="info-value-1" id="birthdate"></span>
+          </div>
+        </div>
+        <div class="col-md-6 text-center">
+          <label class="form-label-1">Profile image:</label>
+          <div class="mb-3-1">
+            <img src="https://via.placeholder.com/200" class="profile-img-1" alt="Profile Image" id="profileImage">
+          </div>
+          <input type="file" class="form-control-1 d-none" id="imageUpload" accept=".png,.jpeg,.jpg">
+          <button class="btn btn-custom-discard-1 btn-sm" id="changeImageBtn">Change Image</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal Info Section -->
+    <div class="card-1 custom-card-1 p-4 mb-4">
+      <h5>Personal info</h5>
+      <p class="text-muted">Update your personal information.</p>
+      <button class="btn btn-custom-edit-1 mb-3-1" id="editPersonalInfoBtn">Edit</button>
+      <div class="edit-form-1" id="personalInfoForm">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3-1">
+              <label for="firstName" class="form-label-1">First name:</label>
+              <div class="d-flex align-items-center">
+                <input type="text" class="form-control-1" id="firstName" value="">
+                <span class="lock-icon-1">
+                  <span class="tooltip-1">Private information, only you can see it</span>
+                </span>
+              </div>
+            </div>
+            <div class="mb-3-1">
+              <label for="phoneInput" class="form-label-1">Phone:</label>
+              <div class="d-flex align-items-center">
+                <input type="text" class="form-control-1" id="phoneInput" value="">
+                <span class="lock-icon-1">
+                  <span class="tooltip-1">Private information, only you can see it</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3-1">
+              <label for="lastName" class="form-label-1">Last name:</label>
+              <div class="d-flex align-items-center">
+                <input type="text" class="form-control-1" id="lastName" value="">
+                <span class="lock-icon-1">
+                  <span class="tooltip-1">Private information, only you can see it</span>
+                </span>
+              </div>
+            </div>
+            <div class="mb-3-1">
+              <label for="birthdateInput" class="form-label-1">Birthdate:</label>
+              <div class="d-flex align-items-center">
+                <input type="date" class="form-control-1" id="birthdateInput">
+                <span class="lock-icon-1">
+                  <span class="tooltip-1">Private information, only you can see it</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-custom-discard-1 me-2" id="discardPersonalInfo">Discard</button>
+          <button class="btn btn-custom-update-1" id="updatePersonalInfo">Update info</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Info Section -->
+    <div class="card-1 p-4 mb-4">
+      <h5>Login info</h5>
+      <p class="text-muted">View and update your login email and password.</p>
+      <div class="info-item-1">
+        <span class="info-label-1">Login email:</span>
+        <span class="info-value-1" id="loginEmail">Loading...</span>
+      </div>
+      <div class="info-item-1">
+        <span class="info-label-1">Password:</span>
+        <span class="info-value-1" id="loginPassword">********</span>
+      </div>
+      <p>Site owners can only change their login email and password in Account Settings.</p>
+      <button class="btn btn-custom-edit-1 mb-3-1" id="editLoginInfoBtn">Edit</button>
+    </div>
+
+    <!-- Change Password Section -->
+    <div class="card-1 p-4" id="changePasswordSection">
+      <h4>Change Password</h4>
+      <form id="changePasswordForm">
+        <div class="mb-3-1">
+          <label for="currentPassword" class="form-label-1">Current Password:</label>
+          <input type="password" class="form-control-1" id="currentPassword" required>
+        </div>
+        <div class="mb-3-1">
+          <label for="newPassword" class="form-label-1">New Password:</label>
+          <input type="password" class="form-control-1" id="newPassword" required>
+        </div>
+        <div class="mb-3-1">
+          <label for="confirmPassword" class="form-label-1">Confirm New Password:</label>
+          <input type="password" class="form-control-1" id="confirmPassword" required>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-custom-discard-1" id="cancelChangePassword">Cancel</button>
+          <button type="submit" class="btn btn-custom-update-1" id="submitChangePassword">Change Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-left">
+        <h1>DONKIES <img src="{{ url_for('serve_assets', filename='logo2.png') }}" alt="star icon" class="star-icon"></h1>
+      </div>
+      <div class="footer-center">
+        <ul>
+          <li><a href="{{ url_for('index') }}">HOME</a></li>
+          <li><a href="{{ url_for('index') }}#about-section">ABOUT</a></li>
+          <li><a href="{{ url_for('products_user') }}">PRODUCTS</a></li>
+          <li><a href="{{ url_for('index') }}#gallery-wrapper">MEDIA</a></li>
+          <li><a href="{{ url_for('my_account') }}">myACCOUNT</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">
+        <p>ABC@GMAIL.COM</p>
+        <p>123-456-7890</p>
+        <p>123 HAI BA TRUNG</p>
+        <p>DONG DA, HA NOI</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="social-icons">
+        <a href="#" class="icon-circle"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="icon-circle"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="icon-circle"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="icon-circle"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+      <div class="footer-links">
+                <a href="{{ url_for('serve_assets', filename='privacy.html') }}">Privacy Policy</a>
+                <a href="{{ url_for('serve_assets', filename='privacy.html') }}">Accessibility Statement</a>
+      </div>
+      <div class="copyright">
+        © 2025 by G2 vo dich.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Format date from YYYY-MM-DD to MM/DD/YYYY for display
+    function formatDateForDisplay(dateStr) {
+      if (!dateStr) return '';
+      const [year, month, day] = dateStr.split('-');
+      return `${month}/${day}/${year}`;
+    }
+
+    // Format date from MM/DD/YYYY to YYYY-MM-DD for API
+    function formatDateForAPI(dateStr) {
+      if (!dateStr) return '';
+      const [month, day, year] = dateStr.split('/');
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
+
+    // Format date from YYYY-MM-DD (date input) to MM/DD/YYYY for display
+    function convertDateInputToDisplay(dateStr) {
+      if (!dateStr) return '';
+      const [year, month, day] = dateStr.split('-');
+      return `${month}/${day}/${year}`;
+    }
+
+    // Format date from MM/DD/YYYY to YYYY-MM-DD for date input
+    function convertDateDisplayToInput(dateStr) {
+      if (!dateStr) return '';
+      const [month, day, year] = dateStr.split('/');
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
+
+    // Fetch user data on page load
+    async function loadUserData() {
+      try {
+        const response = await fetch('/api/user', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) {
+          if (response.status === 404) {
+            alert('Không tìm thấy người dùng. Vui lòng đăng nhập lại.');
+            window.location.href = '/login';
+            return;
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const user = await response.json();
+        document.getElementById('displayName').textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+        document.getElementById('gmail').textContent = user.email || 'N/A';
+        document.getElementById('loginEmail').textContent = user.email || 'N/A';
+        document.getElementById('phone').textContent = user.phone || '';
+        document.getElementById('birthdate').textContent = convertDateInputToDisplay(user.birthdate) || '';
+        document.getElementById('firstName').value = user.first_name || '';
+        document.getElementById('lastName').value = user.last_name || '';
+        document.getElementById('phoneInput').value = user.phone || '';
+        document.getElementById('birthdateInput').value = user.birthdate || '';
+        document.getElementById('profileImage').src = user.user_img || 'https://via.placeholder.com/200';
+      } catch (error) {
+        console.error('Error loading user data:', error);
+        alert('Không thể tải dữ liệu người dùng: ' + error.message);
+      }
+    }
+
+    // Call loadUserData on page load
+    window.addEventListener('load', loadUserData);
+
+    // Scroll event for navbar hide/show
+    let lastScrollTop = 0;
+    let hideTimeout = null;
+    window.addEventListener('scroll', function() {
+      const navbar = document.querySelector('.nav-container22');
+      const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      if (hideTimeout) clearTimeout(hideTimeout);
+      if (currentScrollTop < lastScrollTop) {
+        navbar.classList.remove('hidden');
+      } else if (currentScrollTop > lastScrollTop && currentScrollTop > 0) {
+        hideTimeout = setTimeout(() => navbar.classList.add('hidden'), 500);
+      }
+      lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+    });
+
+    // Personal Info Edit
+    const editPersonalInfoBtn = document.getElementById('editPersonalInfoBtn');
+    const personalInfoForm = document.getElementById('personalInfoForm');
+    editPersonalInfoBtn.addEventListener('click', () => {
+      personalInfoForm.style.display = 'block';
+      editPersonalInfoBtn.style.display = 'none';
+    });
+
+    document.getElementById('discardPersonalInfo').addEventListener('click', () => {
+      loadUserData(); // Reset form to original data
+      personalInfoForm.style.display = 'none';
+      editPersonalInfoBtn.style.display = 'block';
+      alert('Hủy bỏ thay đổi thông tin cá nhân');
+    });
+
+    document.getElementById('updatePersonalInfo').addEventListener('click', async () => {
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const phone = document.getElementById('phoneInput').value.trim();
+      const birthdate = document.getElementById('birthdateInput').value.trim();
+
+      // Validation
+      if (!firstName || !lastName) {
+        alert('Họ và tên là bắt buộc');
+        return;
+      }
+      if (phone && !/^\d{10,11}$/.test(phone)) {
+        alert('Số điện thoại phải có 10 hoặc 11 chữ số');
+        return;
+      }
+      if (birthdate && !/^\d{4}-\d{2}-\d{2}$/.test(birthdate)) {
+        alert('Ngày sinh phải được chọn từ lịch');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/update-profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ firstName, lastName, phone: phone || null, birthdate: birthdate || null })
+        });
+        const result = await response.json();
+        if (response.ok) {
+          document.getElementById('displayName').textContent = `${firstName} ${lastName}`.trim();
+          document.getElementById('phone').textContent = phone || '';
+          document.getElementById('birthdate').textContent = convertDateInputToDisplay(birthdate) || '';
+          personalInfoForm.style.display = 'none';
+          editPersonalInfoBtn.style.display = 'block';
+          alert('Cập nhật thông tin cá nhân thành công');
+        } else {
+          alert(`Lỗi: ${result.error}`);
+        }
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        alert(`Lỗi: ${error.message}`);
+      }
+    });
+
+    // Login Info Edit - Show Change Password
+    const editLoginInfoBtn = document.getElementById('editLoginInfoBtn');
+    const changePasswordSection = document.getElementById('changePasswordSection');
+    editLoginInfoBtn.addEventListener('click', () => {
+      changePasswordSection.style.display = 'block';
+      editLoginInfoBtn.style.display = 'none';
+    });
+
+    document.getElementById('cancelChangePassword').addEventListener('click', () => {
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+      changePasswordSection.style.display = 'none';
+      editLoginInfoBtn.style.display = 'block';
+      alert('Hủy bỏ đổi mật khẩu');
+    });
+
+    document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (newPassword !== confirmPassword) {
+        alert('Mật khẩu mới và xác nhận mật khẩu không khớp');
+        return;
+      }
+      if (newPassword.length < 8) {
+        alert('Mật khẩu mới phải dài ít nhất 8 ký tự');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+        const result = await response.json();
+        if (response.ok) {
+          changePasswordSection.style.display = 'none';
+          editLoginInfoBtn.style.display = 'block';
+          document.getElementById('currentPassword').value = '';
+          document.getElementById('newPassword').value = '';
+          document.getElementById('confirmPassword').value = '';
+          alert('Đổi mật khẩu thành công');
+        } else {
+          alert(`Lỗi: ${result.error}`);
+        }
+      } catch (error) {
+        console.error('Error changing password:', error);
+        alert(`Lỗi: ${error.message}`);
+      }
+    });
+
+    // Profile Image Upload
+    const imageUpload = document.getElementById('imageUpload');
+    const profileImage = document.getElementById('profileImage');
+    const changeImageBtn = document.getElementById('changeImageBtn');
+
+    changeImageBtn.addEventListener('click', () => {
+      imageUpload.click();
+    });
+
+    imageUpload.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+      if (!validTypes.includes(file.type)) {
+        alert('Vui lòng tải lên tệp PNG hoặc JPEG.');
+        imageUpload.value = '';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      try {
+        const response = await fetch('/api/upload-profile-image', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        if (response.ok) {
+          profileImage.src = result.image_url;
+          alert('Cập nhật ảnh đại diện thành công');
+        } else {
+          alert(`Lỗi: ${result.error}`);
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        alert(`Lỗi: ${error.message}`);
+      }
+      imageUpload.value = ''; // Reset input
+    });
+  </script>
+  <script src="https://kit.fontawesome.com/6026c58141.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></scrip>
+  <script src="{{ url_for('serve_assets', filename='js/navbar.js') }}"></script>
+</body>
+</html>

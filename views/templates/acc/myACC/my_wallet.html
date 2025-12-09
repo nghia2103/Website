@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #ffffff;
+
+    }
+    .btn-custom-discard {
+      background-color: #fff3cd;
+      color: #000;
+      border: 1px solid #ffeeba;
+    }
+    .btn-custom-update {
+      background-color: rgb(106, 122, 0);
+      color: #fff;
+    }
+    .profile-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .card {
+      border-width: 1px 0 1px 0;
+      border-style: solid;
+      border-color: #ccc;
+      border-radius: 0;
+    }
+    .custom-card{
+        border: 0;
+    }
+    .lock-icon {
+      display: inline-block;
+      margin-left: 10px;
+      cursor: pointer;
+      position: relative;
+    }
+    .lock-icon::before {
+      content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" class="bi bi-lock" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/></svg>');
+    }
+    .lock-icon:hover::before {
+      content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(106, 122, 0)" class="bi bi-lock" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/></svg>');
+    }
+    .lock-icon:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+    .tooltip {
+      visibility: hidden;
+      opacity: 0;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 4px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      transition: opacity 0.3s;
+    }
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #333 transparent transparent transparent;
+    }
+    .btn-custom-discard{
+        border-radius: 0;
+        border : 1px solid rgb(106, 122, 0);
+        background-color:#ffffff;
+        color: rgb(106, 122, 0);
+    }
+    .btn-custom-discard:hover{
+        text-decoration: underline;
+        border-radius: 0;
+        border : 1px solid rgb(106, 122, 0);
+        background-color:#ffffff;
+        color: rgb(106, 122, 0);
+    }
+    .btn-custom-update{
+        border-radius: 0;
+    }
+    .btn-custom-update:hover{
+        text-decoration: underline;
+        color:white;
+        background-color: rgb(106,122,0);
+    }
+    .form-control{
+        border: 1px solid black;
+        border-radius: 0 !important;
+    }
+    .nav-link-custom{
+        text-decoration: none;
+    }
+    .custom-a{
+        font-family: "Azeret Mono", monospace;
+    }
+    .custom-a:hover{
+        text-decoration: none;
+    }
+    .fa-brands::before{
+        width: 24px;
+        height: 24px;
+    }
+    .btn-custom-d9df6d{
+        background-color: #d9df6d;
+    }
+    .custom-background{
+        background-color: #d9df6d;
+    }
+    .footer-end{
+        background-color: #d9df6d;
+    }
+    .custom-title{
+        font-family: Arial Black,sans-serif;
+        font-size: 83px;
+    }
+    .brand-graphic{
+        height: 70px;
+    }
+    .custom-div1{
+        display: inline;
+    }
+            .footer {
+            margin-top: 20px;
+            padding: 40px;
+            background-color: #d4e157;
+        }
+
+        .footer-main {
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .footer-left h1 {
+            padding-top: 48px;
+            font-family: Arial, sans-serif;
+            color: black;
+            font-size: 80px;
+            font-weight: 900;
+        }
+
+        .star-icon {
+            width: 68px;
+            height: 68px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            animation: rotate360 5s linear infinite;
+        }
+
+        @keyframes rotate360 {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .footer-center ul {
+            list-style: none;
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .footer-center li {
+            margin: 5px 0;
+        }
+
+        .footer-right p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            flex-wrap: wrap;
+            border-top: 1px solid rgb(0, 0, 0);
+            padding-top: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .icon-circle {
+            background-color: black;
+            color: #d4e157;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .icon-circle i {
+            font-size: 16px;
+        }
+
+        .footer-links a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .footer-right {
+            font-family: azeret-mono, "azeret mono", monospace;
+            padding-right: 400px;
+            padding-top: 60px;
+        }
+
+        .footer-center {
+            font-family: azeret-mono, "azeret mono", monospace;
+            padding-top: 60px;
+        }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs mb-4" id="navTabs">
+      <li class="nav-item">
+        <a class="nav-link active" href="my_account.html" data-tab="my-account">My Account</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="my_order.html" data-tab="my-orders">My Orders</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="my_address.html" data-tab="my-addresses">My Addresses</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="my_wallet.html" data-tab="my-wallet">My Wallet</a>
+      </li>
+    </ul>
+
+    <!-- Wallet Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2>Wallet</h2>
+        <p class="text-muted">Save your payment details for faster checkout.</p>
+      </div>
+      <div>
+
+      </div>
+    </div>
+    <!--Order list-->
+    <div class="card px-4 pt-5 my-5 text-center" style="height: 450px;"> 
+        <div class="col-lg-6 mx-auto"> 
+            <p class="lead mb-4 fw-semibold">You haven’t saved any payment methods yet</p> 
+            <p class="lead mb-4">Securely save your payment details for faster checkout whenever you place an order.</p> 
+            </div> 
+        </div> 
+    </div>
+  </div>
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-left">
+                <h1>DONKIES <img src="Asset 2.png" alt="" class="star-icon"></h1>
+            </div>
+            <div class="footer-center">
+                <ul>
+                    <li>HOME</li>
+                    <li>ABOUT</li>
+                    <li>PRODUCTS</li>
+                    <li>MEDIA</li>
+                    <li>myACCOUNT</li>
+                </ul>
+            </div>
+            <div class="footer-right">
+                <p>ABC@GMAIL.COM</p>
+                <p>123-456-7890</p>
+                <p>123 HAI BA TRUNG</p>
+                <p>DONG DA, HA NOI</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="social-icons">
+                <a href="#" class="icon-circle"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="icon-circle"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="icon-circle"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="icon-circle"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <div class="footer-links">
+                <a href="{{ url_for('serve_assets', filename='privacy.html') }}">Privacy Policy</a>
+                <a href="{{ url_for('serve_assets', filename='privacy.html') }}">Accessibility Statement</a>
+            </div>
+            <div class="copyright">
+                © 2025 by G2 vo dich.
+            </div>
+        </div>
+    </footer>
+    <script src="https://kit.fontawesome.com/6026c58141.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/6026c58141.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+  </script>
+      <script>
+        let lastScrollTop = 0;
+        let hideTimeout = null;
+
+        // Scroll event for navbar hide/show
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            // Handle navbar hide/show
+            if (hideTimeout) {
+                clearTimeout(hideTimeout);
+            }
+
+            if (currentScrollTop < lastScrollTop) {
+                navbar.classList.remove('hidden');
+            } else if (currentScrollTop > lastScrollTop && currentScrollTop > 0) {
+                hideTimeout = setTimeout(() => {
+                    navbar.classList.add('hidden');
+                }, 500);
+            }
+
+            lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+        });
+    </script>
+</body>
+</html>

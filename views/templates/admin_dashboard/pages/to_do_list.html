@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a73e8;
+            padding: 20px 25px;
+            display: block;
+            text-align: center;
+        }
+        .sidebar a {
+            color: #5f6368;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+        }
+        .sidebar h6 {
+            color: #80868b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 15px 25px;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        /* User Profile Styles */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+        }
+        .user-profile .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-profile .user-info .name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .user-profile .user-info .role {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .user-profile .dropdown-icon {
+            color: #6c757d;
+        }
+        /* To-Do List Styles */
+        .todo-section {
+            margin-top: 20px;
+        }
+        .todo-list {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .todo-list h5 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .task-item:hover {
+            background-color: #f8f9fa;
+        }
+        .task-item .task-details {
+            flex: 1;
+        }
+        .task-item .task-details .title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .task-item .task-details .time {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .task-item .task-details .manager {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .task-item .delete-btn {
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+        .task-item .delete-btn:hover {
+            color: #c82333;
+        }
+        .task-item .edit-btn {
+            color: #007bff;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+        .task-item .edit-btn:hover {
+            color: #0056b3;
+        }
+        /* Color Borders */
+        .task-item.event-green {
+            border-left: 4px solid #28a745;
+        }
+        .task-item.event-blue {
+            border-left: 4px solid #007bff;
+        }
+        .task-item.event-pink {
+            border-left: 4px solid #e83e8c;
+        }
+        .task-item.event-purple {
+            border-left: 4px solid #6f42c1;
+        }
+        .task-item.event-orange {
+            border-left: 4px solid #fd7e14;
+        }
+        .task-item.event-yellow {
+            border-left: 4px solid #ffc107;
+        }
+        .task-item.event-red {
+            border-left: 4px solid #dc3545;
+        }
+        /* Filter Form Styles */
+        .filter-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        .filter-form .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        .filter-form .form-group label {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .filter-form .form-group select,
+        .filter-form .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        .filter-form .btn {
+            align-self: flex-end;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+        }
+        /* Section Headers */
+        .event-section {
+            margin-bottom: 30px;
+        }
+        .event-section h6 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .filter-form .form-group {
+                min-width: 100%;
+            }
+            .header {
+                align-items: center;
+            }
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .user-profile {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">DashStack</div>
+        <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' else '' }}"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="{{ url_for('admin_products') }}" class="{{ 'active' if request.endpoint == 'products' else '' }}"><i class="fas fa-box"></i> Products</a>
+        <a href="{{ url_for('favorites') }}" class="{{ 'active' if request.endpoint == 'favorites' else '' }}"><i class="fas fa-heart"></i> Favorites</a>
+        <a href="{{ url_for('inbox') }}" class="{{ 'active' if request.endpoint == 'inbox' else '' }}"><i class="fas fa-inbox"></i> Inbox</a>
+        <a href="{{ url_for('order_lists') }}" class="{{ 'active' if request.endpoint == 'order_lists' else '' }}"><i class="fas fa-list"></i> Order Lists</a>
+        <a href="{{ url_for('product_stock') }}" class="{{ 'active' if request.endpoint == 'product_stock' else '' }}"><i class="fas fa-cubes"></i> Product Stock</a>
+        <a href="{{ url_for('user_management') }}" class="{{ 'active' if request.endpoint == 'user_management' else '' }}"><i class="fas fa-users"></i> User Management</a>
+        <h6>PAGES</h6>
+        <a href="{{ url_for('pricing') }}" class="{{ 'active' if request.endpoint == 'pricing' else '' }}" style="display: none;"><i class="fas fa-money-bill"></i> Pricing</a>
+        <a href="{{ url_for('calendar') }}" class="{{ 'active' if request.endpoint == 'calendar' else '' }}"><i class="fas fa-calendar"></i> Calendar</a>
+        <a href="{{ url_for('to_do_list') }}" class="{{ 'active' if request.endpoint == 'to_do_list' else '' }}"><i class="fas fa-check-circle"></i> To-Do</a>
+        <a href="{{ url_for('contact') }}" class="{{ 'active' if request.endpoint == 'contact' else '' }}"><i class="fas fa-address-book"></i> Contact</a>
+        <a href="{{ url_for('invoices') }}" class="{{ 'active' if request.endpoint == 'invoices' else '' }}"><i class="fas fa-file-invoice"></i> Invoice</a>
+        <a href="{{ url_for('setting') }}" class="{{ 'active' if request.endpoint == 'setting' else '' }}"><i class="fas fa-cog"></i> Settings</a>
+        <a href="{{ url_for('logout') }}" class="{{ 'active' if request.endpoint == 'logout' else '' }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <h4>To-Do</h4>
+                <div class="d-flex align-items-center">
+                    <!-- <button class="btn btn-outline-secondary me-2"><i class="fas fa-bell me-1"></i></button> -->
+                    <div class="dropdown me-2">
+                        <!-- <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown">
+                            <img src="https://flagcdn.com/16x12/gb.png" alt="Flag" class="me-1"> English
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <li><a class="dropdown-item" href="#">Spanish</a></li>
+                            <li><a class="dropdown-item" href="#">French</a></li>
+                        </ul> -->
+                    </div>
+                    <!-- User Profile -->
+                    <div class="user-profile">
+                        <!-- <img src="https://via.placeholder.com/40" alt="Profile">
+                        <div class="user-info">
+                            <span class="name">Miu</span>
+                            <span class="role">Admin</span>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-icon"></i> -->
+                    </div>
+                </div>
+            </div>
+            <!-- Filter Form -->
+            <div class="filter-form">
+                <div class="form-group">
+                    <label for="adminFilter">Admin Name</label>
+                    <select id="adminFilter">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Start Date</label>
+                    <input type="text" id="startDate" class="flatpickr-input" value="2025-01-01">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date</label>
+                    <input type="text" id="endDate" class="flatpickr-input" value="2025-12-31">
+                </div>
+                <button class="btn btn-primary" onclick="filterEvents()">Filter</button>
+            </div>
+        </div>
+
+        <!-- To-Do List Section -->
+        <div class="todo-section">
+            <div class="todo-list">
+                <h5>To-Do List</h5>
+                <!-- Upcoming Events -->
+                <div class="event-section">
+                    <h6>Upcoming</h6>
+                    <div id="upcoming-list"></div>
+                </div>
+                <!-- Past Events -->
+                <div class="event-section">
+                    <h6>Past</h6>
+                    <div id="past-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Task Modal -->
+        <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTaskModalLabel">Edit Event</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="editEventId">
+                        <div class="mb-3">
+                            <label for="editEventName" class="form-label">Event Name</label>
+                            <input type="text" class="form-control" id="editEventName" placeholder="Enter event name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventDate" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="editEventDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventTime" class="form-label">Time</label>
+                            <input type="time" class="form-control" id="editEventTime" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventManager" class="form-label">Manager</label>
+                            <select class="form-control" id="editEventManager" required>
+                                <option value="" disabled selected>Select an admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="saveEditedEvent()">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Confirmation Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to logout?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='logout.html'">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script>
+        let events = [];
+        const currentDate = new Date('2025-06-06');
+
+        // Initialize Flatpickr
+        flatpickr('#startDate', { dateFormat: 'Y-m-d' });
+        flatpickr('#endDate', { dateFormat: 'Y-m-d' });
+
+        // Load events from database
+        async function loadEvents() {
+            try {
+                console.log('Fetching events from /get_all_events...');
+                const response = await fetch('/get_all_events', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    events = data.events || [];
+                    console.log('Events fetched:', events);
+                    // Sort events by date DESC (future first)
+                    events.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    filterEvents();
+                } else {
+                    console.error('Failed to fetch events:', data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        }
+
+        // Fetch admins for filter and edit modal
+        async function fetchAdmins(selectElementId, selectedAdminData = null) {
+            try {
+                console.log('Fetching admins for dropdown...');
+                const response = await fetch('/get_admins', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (data.success && Array.isArray(data.admins)) {
+                    const select = document.getElementById(selectElementId);
+                    if (selectElementId === 'adminFilter') {
+                        select.innerHTML = '<option value="">All</option>';
+                    } else {
+                        select.innerHTML = '<option value="" disabled selected>Select an admin</option>';
+                    }
+                    data.admins.forEach(admin => {
+                        const option = document.createElement('option');
+                        const adminData = {
+                            admin_id: admin.admin_id,
+                            adminname: `${admin.first_name} ${admin.last_name}`
+                        };
+                        option.value = JSON.stringify(adminData);
+                        option.textContent = adminData.adminname;
+                        select.appendChild(option);
+                    });
+                    if (selectedAdminData) {
+                        select.value = JSON.stringify(selectedAdminData);
+                    }
+                } else {
+                    console.error('No admins found:', data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching admins:', error);
+            }
+        }
+
+        // Filter events
+        function filterEvents() {
+            const adminFilter = JSON.parse(document.getElementById('adminFilter').value || '{}');
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            const filteredEvents = events.filter(event => {
+                const eventDate = new Date(event.date);
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                const adminMatch = !adminFilter.admin_id || event.admin_id === adminFilter.admin_id;
+                const dateMatch = eventDate >= start && eventDate <= end;
+                return adminMatch && dateMatch;
+            });
+
+            // Split into upcoming and past
+            const upcomingEvents = filteredEvents.filter(event => new Date(event.date) >= currentDate);
+            const pastEvents = filteredEvents.filter(event => new Date(event.date) < currentDate);
+
+            renderEvents(upcomingEvents, 'upcoming-list');
+            renderEvents(pastEvents, 'past-list');
+        }
+
+        // Render events
+        function renderEvents(events, listId) {
+            const taskList = document.getElementById(listId);
+            taskList.innerHTML = '';
+            events.forEach(event => {
+                const dateParts = event.date.split('-');
+                const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+                const timeParts = event.time.split(':');
+                const hours = parseInt(timeParts[0], 10);
+                const minutes = timeParts[1];
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                const formattedHours = hours % 12 || 12;
+                const formattedTime = `${formattedHours}:${minutes} ${ampm}`;
+
+                const taskItem = document.createElement('div');
+                taskItem.className = `task-item event-${event.color || 'blue'}`;
+                taskItem.innerHTML = `
+                    <div class="task-details">
+                        <div class="title">${event.event_name}</div>
+                        <div class="time">${formattedTime}, ${formattedDate}</div>
+                        <div class="manager">${event.adminname}</div>
+                    </div>
+                    <i class="fas fa-edit edit-btn" onclick="openEditModal('${event.event_id}')"></i>
+                    <i class="fas fa-trash delete-btn" onclick="confirmDelete('${event.event_id}')"></i>
+                `;
+                taskList.appendChild(taskItem);
+            });
+        }
+
+        // Open edit modal
+        function openEditModal(eventId) {
+            const event = events.find(e => e.event_id === eventId);
+            if (!event) return;
+
+            document.getElementById('editEventId').value = event.event_id;
+            document.getElementById('editEventName').value = event.event_name;
+            document.getElementById('editEventDate').value = event.date;
+            document.getElementById('editEventTime').value = event.time;
+
+            fetchAdmins('editEventManager', { admin_id: event.admin_id, adminname: event.adminname }).then(() => {
+                const modal = new bootstrap.Modal(document.getElementById('editTaskModal'));
+                modal.show();
+            });
+        }
+
+        // Save edited event
+        async function saveEditedEvent() {
+            const eventId = document.getElementById('editEventId').value;
+            const eventName = document.getElementById('editEventName').value;
+            const eventDate = document.getElementById('editEventDate').value;
+            const eventTime = document.getElementById('editEventTime').value;
+            const managerData = JSON.parse(document.getElementById('editEventManager').value || '{}');
+
+            if (!eventName || !eventDate || !eventTime || !managerData.admin_id) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/update_event/${eventId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        event_name: eventName,
+                        date: eventDate,
+                        time: eventTime,
+                        admin_id: managerData.admin_id,
+                        adminname: managerData.adminname,
+                        color: events.find(e => e.event_id === eventId).color
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    events = events.map(e => e.event_id === eventId ? data.event : e);
+                    filterEvents();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editTaskModal'));
+                    modal.hide();
+                } else {
+                    alert('Failed to update event: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error updating event:', error);
+                alert('Error updating event.');
+            }
+        }
+
+        // Confirm delete
+        function confirmDelete(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                deleteEvent(eventId);
+            }
+        }
+
+        // Delete event
+        async function deleteEvent(eventId) {
+            try {
+                const response = await fetch(`/delete_event/${eventId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    events = events.filter(e => e.event_id !== eventId);
+                    filterEvents();
+                } else {
+                    alert('Failed to delete event: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error deleting event:', error);
+                alert('Error deleting event.');
+            }
+        }
+
+        // Load events and admins when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('To-Do List page loading...');
+            fetchAdmins('adminFilter');
+            loadEvents();
+        });
+    </script>
+</body>
+</html>

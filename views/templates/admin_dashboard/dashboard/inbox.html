@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* Body Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a73e8;
+            padding: 20px 25px;
+            display: block;
+            text-align: center;
+        }
+        .sidebar a {
+            color: #5f6368;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+        }
+        .sidebar h6 {
+            color: #80868b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 15px 25px;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* User Profile Styles */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+        }
+        .user-profile .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-profile .user-info .name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .user-profile .user-info .role {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .user-profile .dropdown-icon {
+            color: #6c757d;
+        }
+
+        /* Inbox Layout Styles */
+        .inbox-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+        .sidebar-mail {
+            flex: 1;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: auto; /* Không kéo dài hết màn hình */
+        }
+        .inbox-details {
+            flex: 2;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none; /* Ẩn mặc định */
+        }
+        .inbox-details.active {
+            display: block; /* Hiển thị khi active */
+        }
+        .sidebar-mail .header-mail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .sidebar-mail .search-input {
+            display: none; /* Ẩn input mặc định */
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        .sidebar-mail .search-input.active {
+            display: block; /* Hiển thị khi click nút Search */
+        }
+        .sidebar-mail .message-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-mail .message-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #dee2e6;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .sidebar-mail .message-item:hover,
+        .sidebar-mail .message-item.active {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+        }
+        .sidebar-mail .message-item .message-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sidebar-mail .message-item .message-info .sender {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .sidebar-mail .message-item .message-info .date {
+            font-size: 0.85rem;
+            color: #6c757d;
+            position: relative;
+        }
+        .sidebar-mail .message-item .subject {
+            font-size: 0.85rem;
+            color: #333;
+            margin-top: 5px;
+        }
+        .sidebar-mail .message-item:hover .date,
+        .sidebar-mail .message-item.active .date {
+            color: #1a73e8;
+        }
+        .sidebar-mail .message-item:hover .subject,
+        .sidebar-mail .message-item.active .subject {
+            color: #1a73e8;
+        }
+        /* Dấu chấm xanh cho tin nhắn chưa đọc */
+        .sidebar-mail .message-item .message-info .date::after {
+            content: '';
+            display: none;
+            width: 8px;
+            height: 8px;
+            background-color: #324bb8;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+        }
+        .sidebar-mail .message-item.unread .message-info .date::after {
+            display: block;
+        }
+        .inbox-details .header-details {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .inbox-details .header-details h5 {
+            font-size: 1.25rem;
+            margin-bottom: 5px;
+        }
+        .inbox-details .header-details p {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        /* Nút dấu X */
+        .inbox-details .header-details .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #6c757d;
+            cursor: pointer;
+        }
+        .inbox-details .header-details .close-btn:hover {
+            color: #dc3545;
+        }
+        .inbox-details .message-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            max-height: 400px;
+            padding: 10px;
+        }
+        .inbox-details .actions {
+            margin-top: 20px;
+        }
+        .inbox-details .actions .btn {
+            font-size: 0.9rem;
+            padding: 5px 15px;
+        }
+        /* Sửa chat-input để input và nút Send cùng hàng */
+        .chat-input {
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap; /* Ngăn nhảy hàng */
+            gap: 10px; /* Khoảng cách giữa input và nút */
+        }
+        .message-input {
+            flex: 1; /* Chiếm không gian còn lại */
+            height: 35px;
+            border-radius: 8px;
+            border: 1px solid #000;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .chat-input .btn {
+            flex-shrink: 0; /* Ngăn nút bị co lại */
+            white-space: nowrap; /* Ngăn chữ trong nút nhảy hàng */
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .inbox-container {
+                flex-direction: column;
+            }
+            .sidebar-mail, .inbox-details {
+                flex: none;
+            }
+            /* Đảm bảo chat-input vẫn cùng hàng ở màn nhỏ */
+            .chat-input {
+                flex-direction: row;
+                gap: 5px;
+            }
+            .message-input {
+                min-width: 0; /* Cho phép input co lại nếu cần */
+            }
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .chat-window {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            list-style: none;
+            padding: 10px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">DashStack</div>
+        <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' else '' }}"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="{{ url_for('admin_products') }}" class="{{ 'active' if request.endpoint == 'products' else '' }}"><i class="fas fa-box"></i> Products</a>
+        <a href="{{ url_for('favorites') }}" class="{{ 'active' if request.endpoint == 'favorites' else '' }}"><i class="fas fa-heart"></i> Favorites</a>
+        <a href="{{ url_for('inbox') }}" class="{{ 'active' if request.endpoint == 'inbox' else '' }}"><i class="fas fa-inbox"></i> Inbox</a>
+        <a href="{{ url_for('order_lists') }}" class="{{ 'active' if request.endpoint == 'order_lists' else '' }}"><i class="fas fa-list"></i> Order Lists</a>
+        <a href="{{ url_for('product_stock') }}" class="{{ 'active' if request.endpoint == 'product_stock' else '' }}"><i class="fas fa-cubes"></i> Product Stock</a>
+        <a href="{{ url_for('user_management') }}" class="{{ 'active' if request.endpoint == 'user_management' else '' }}"><i class="fas fa-users"></i> User Management</a>
+        <h6>PAGES</h6>
+        <a href="{{ url_for('pricing') }}" class="{{ 'active' if request.endpoint == 'pricing' else '' }}" style="display: none;"><i class="fas fa-money-bill"></i> Pricing</a>
+        <a href="{{ url_for('calendar') }}" class="{{ 'active' if request.endpoint == 'calendar' else '' }}"><i class="fas fa-calendar"></i> Calendar</a>
+        <a href="{{ url_for('to_do_list') }}" class="{{ 'active' if request.endpoint == 'to_do_list' else '' }}"><i class="fas fa-check-circle"></i> To-Do</a>
+        <a href="{{ url_for('contact') }}" class="{{ 'active' if request.endpoint == 'contact' else '' }}"><i class="fas fa-address-book"></i> Contact</a>
+        <a href="{{ url_for('invoices') }}" class="{{ 'active' if request.endpoint == 'invoices' else '' }}"><i class="fas fa-file-invoice"></i> Invoice</a>
+        <a href="{{ url_for('setting') }}" class="{{ 'active' if request.endpoint == 'setting' else '' }}"><i class="fas fa-cog"></i> Settings</a>
+        <a href="{{ url_for('logout') }}" class="{{ 'active' if request.endpoint == 'logout' else '' }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h4>Inbox</h4>
+            <div class="d-flex align-items-center">
+                <!-- <button class="btn btn-outline-secondary me-2"><i class="fas fa-bell me-1"></i></button> -->
+                <div class="dropdown me-2">
+                    <!-- <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown">
+                        <img src="https://flagcdn.com/16x12/gb.png" alt="Flag" class="me-1">English
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li><a class="dropdown-item" href="#">Spanish</a></li>
+                        <li><a class="dropdown-item" href="#">France</a></li>
+                    </ul> -->
+                </div>
+                <div class="user-profile">
+                    <!-- <img src="https://via.placeholder.com/40" alt="Hồ sơ"> -->
+                    <div class="user-info">
+                        <span class="name">{{ admin.first_name }} {{ admin.last_name }}</span>
+                        <span class="role">Admin</span>
+                    </div>
+                    <!-- <i class="fas fa-chevron-down dropdown-icon"></i> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="inbox-container">
+            <div class="sidebar-mail">
+                <div class="header-mail">
+                    <h5>Inbox</h5>
+                    <button class="btn btn-primary btn-sm" id="searchButton"><i class="fas fa-magnifying-glass me-1"></i>Search</button>
+                </div>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by name...">
+                <ul class="message-list" id="messageList"></ul>
+            </div>
+
+            <div class="inbox-details" id="inboxDetails">
+                <div class="header-details" id="messageHeader">
+                    <h5>Select a conversation</h5>
+                    <p></p>
+                    <button class="close-btn"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="message-body" id="messageBody"></div>
+                <div class="actions" id="messageActions" style="display: none;">
+                    <div class="chat-input">
+                        <input type="text" class="message-input" id="adminMessageInput" placeholder="Type your message...">
+                        <button class="btn btn-primary" id="sendReplyButton"><i class="fas fa-paper-plane me-1"></i>Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm logout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to log out?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('logout') }}'">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const messageList = document.getElementById('messageList');
+        const messageHeader = document.getElementById('messageHeader');
+        const messageBody = document.getElementById('messageBody');
+        const messageActions = document.getElementById('messageActions');
+        const adminMessageInput = document.getElementById('adminMessageInput');
+        const sendReplyButton = document.getElementById('sendReplyButton');
+        const inboxDetails = document.getElementById('inboxDetails');
+        const searchButton = document.getElementById('searchButton');
+        const searchInput = document.getElementById('searchInput');
+
+        const adminId = '{{ session.admin_id }}';
+        const adminName = '{{ admin.first_name }} {{ admin.last_name }}';
+        let currentUserId = null;
+        let lastMessageNum = 0;
+        let pollingInterval = null;
+        let allThreads = [];
+
+        function loadThreads(searchTerm = '') {
+            fetch('/get_threads', { credentials: 'include' })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            window.location.href = '{{ url_for('login') }}';
+                        }
+                        throw new Error(`Lỗi tải luồng: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.success) throw new Error(data.message);
+                    allThreads = data.threads;
+                    messageList.innerHTML = '';
+                    const filteredThreads = searchTerm 
+                        ? allThreads.filter(thread => 
+                            thread.sender_name.toLowerCase().includes(searchTerm.toLowerCase()))
+                        : allThreads;
+                    filteredThreads.forEach(thread => {
+                        const li = document.createElement('li');
+                        li.className = `message-item ${thread.has_unread ? 'unread' : ''} ${currentUserId === thread.user_id ? 'active' : ''}`;
+                        li.dataset.userId = thread.user_id;
+                        const latestMessage = thread.direction === 'admin_to_user' 
+                            ? `Me: ${thread.content}` 
+                            : `${thread.sender_name}: ${thread.content}`;
+                        const truncatedMessage = latestMessage.length > 50 
+                            ? latestMessage.substring(0, 50) + '...' 
+                            : latestMessage;
+                        li.innerHTML = `
+                            <div class="message-info">
+                                <span class="sender">${thread.sender_name}</span>
+                                <span class="date">${thread.time}</span>
+                            </div>
+                            <div class="subject">${truncatedMessage}</div>
+                        `;
+                        li.addEventListener('click', () => loadMessages(thread.user_id, thread.sender_name));
+                        messageList.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Lỗi tải luồng:', error));
+        }
+
+        function loadMessages(userId, senderName) {
+            currentUserId = userId;
+            fetch(`/get_messages/${userId}`, { credentials: 'include' })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            window.location.href = '{{ url_for('login') }}';
+                        }
+                        if (response.status === 403) {
+                            return response.json().then(data => {
+                                alert(data.message);
+                                closeChatWindow();
+                                throw new Error(data.message);
+                            });
+                        }
+                        throw new Error(`Lỗi tải tin nhắn: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.success) throw new Error(data.message);
+                    const messages = data.messages;
+                    messageBody.innerHTML = '';
+                    messages.forEach(msg => {
+                        addMessageToList(msg);
+                    });
+                    messageBody.scrollTop = messageBody.scrollHeight;
+                    messageActions.style.display = 'block';
+                    messageHeader.innerHTML = `
+                        <h5>${senderName}</h5>
+                        <p>Conversation with ${senderName}</p>
+                        <button class="close-btn"><i class="fas fa-times"></i></button>
+                    `;
+                    inboxDetails.classList.add('active');
+                    loadThreads(searchInput.value);
+                })
+                .catch(error => console.error('Lỗi tải tin nhắn:', error));
+        }
+
+        function addMessageToList(msg) {
+            const existingMessage = document.querySelector(`div[data-message-id="${msg.message_id}"]`);
+            if (existingMessage) return;
+
+            const div = document.createElement('div');
+            div.dataset.messageId = msg.message_id;
+            const isAdmin = msg.direction === 'admin_to_user';
+            div.className = 'message';
+            div.style.marginBottom = '10px';
+            div.style.padding = '8px';
+            div.style.backgroundColor = isAdmin ? '#d1e7dd' : '#f8d7da';
+            div.style.borderRadius = '8px';
+            div.style.maxWidth = '70%';
+            div.style.alignSelf = isAdmin ? 'flex-end' : 'flex-start';
+            div.style.marginLeft = isAdmin ? 'auto' : '10px';
+            div.style.marginRight = isAdmin ? '10px' : 'auto';
+            div.innerHTML = isAdmin 
+                ? `<p>${msg.content} (${msg.time})</p>`
+                : `<p><strong>${msg.sender_name}</strong>: ${msg.content} (${msg.time})</p>`;
+            messageBody.appendChild(div);
+            const messageNum = parseInt(msg.message_id.replace('MS', ''));
+            lastMessageNum = messageNum > lastMessageNum ? messageNum : lastMessageNum;
+        }
+
+        function sendReply() {
+            const content = adminMessageInput.value.trim();
+            if (!content || !currentUserId) return;
+
+            // Gán admin trước khi gửi tin nhắn
+            fetch('/assign_admin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ user_id: currentUserId })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '{{ url_for('login') }}';
+                    }
+                    return response.json().then(data => {
+                        alert(data.message);
+                        throw new Error(data.message);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.success) throw new Error(data.message);
+                // Gửi tin nhắn sau khi gán thành công
+                return fetch('/send_message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        user_id: currentUserId,
+                        admin_id: adminId,
+                        direction: 'admin_to_user',
+                        content: content
+                    })
+                });
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '{{ url_for('login') }}';
+                    }
+                    throw new Error(`Lỗi gửi tin nhắn: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const tempMsg = {
+                        message_id: data.message_id,
+                        direction: 'admin_to_user',
+                        content: content,
+                        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+                        sender_name: adminName
+                    };
+                    addMessageToList(tempMsg);
+                    messageBody.scrollTop = messageBody.scrollHeight;
+                    loadThreads(searchInput.value);
+                } else {
+                    console.error('Lỗi gửi tin nhắn:', data.message);
+                }
+            })
+            .catch(error => console.error('Lỗi gửi tin nhắn:', error));
+
+            adminMessageInput.value = '';
+        }
+
+        function closeChatWindow() {
+            inboxDetails.classList.remove('active');
+            currentUserId = null;
+            messageHeader.innerHTML = `
+                <h5>Select a conversation</h5>
+                <p></p>
+                <button class="close-btn"><i class="fas fa-times"></i></button>
+            `;
+            messageBody.innerHTML = '';
+            messageActions.style.display = 'none';
+            loadThreads(searchInput.value);
+        }
+
+        function toggleSearchInput() {
+            searchInput.classList.toggle('active');
+            if (searchInput.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+                loadThreads();
+            }
+        }
+
+        function handleSearch() {
+            const searchTerm = searchInput.value.trim();
+            loadThreads(searchTerm);
+        }
+
+        function startPolling() {
+            if (pollingInterval) clearInterval(pollingInterval);
+            pollingInterval = setInterval(() => {
+                loadThreads(searchInput.value);
+                if (currentUserId) {
+                    loadMessages(currentUserId, document.querySelector('.message-item.active .sender')?.textContent || 'User');
+                }
+            }, 2000);
+        }
+
+        startPolling();
+        sendReplyButton.addEventListener('click', sendReply);
+        adminMessageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendReply();
+        });
+        searchButton.addEventListener('click', toggleSearchInput);
+        searchInput.addEventListener('input', handleSearch);
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.close-btn')) {
+                closeChatWindow();
+            }
+        });
+
+        loadThreads();
+    });
+</script>
+</body>
+</html>

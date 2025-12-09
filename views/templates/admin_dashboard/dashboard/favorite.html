@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a73e8;
+            padding: 20px 25px;
+            display: block;
+            text-align: center;
+        }
+        .sidebar a {
+            color: #5f6368;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+        }
+        .sidebar h6 {
+            color: #80868b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 15px 25px;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+        }
+        .user-profile .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-profile .name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .user-profile .role {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .user-profile .dropdown-icon {
+            color: #6c757d;
+        }
+        .favourites-grid {
+            margin-top: 20px;
+        }
+        .favourite-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        .favourite-card:hover {
+            transform: translateY(-5px);
+        }
+        .favourite-card .image-container {
+            height: 200px;
+            overflow: hidden;
+        }
+        .favourite-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .favourite-card .card-body {
+            padding: 15px;
+            text-align: center;
+        }
+        .favourite-card .card-body h5 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .favourite-card .card-body .price {
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .favourite-card .card-body .rating {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .favourite-card .card-body .rating i {
+            color: #f1c40f;
+            font-size: 0.9rem;
+        }
+        .favourite-card .card-body .rating i.inactive {
+            color: #d3d3d3;
+        }
+        .favourite-card .card-body .rating i.half {
+            color: #f1c40f;
+        }
+        .favourite-card .card-body .rating .avg-rating {
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: normal;
+        }
+        .favourite-card .card-body .btn {
+            font-size: 0.9rem;
+            padding: 5px 15px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">DashStack</div>
+        <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' else '' }}"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="{{ url_for('admin_products') }}" class="{{ 'active' if request.endpoint == 'products' else '' }}"><i class="fas fa-box"></i> Products</a>
+        <a href="{{ url_for('favorites') }}" class="{{ 'active' if request.endpoint == 'favorites' else '' }}"><i class="fas fa-heart"></i> Favorites</a>
+        <a href="{{ url_for('inbox') }}" class="{{ 'active' if request.endpoint == 'inbox' else '' }}"><i class="fas fa-inbox"></i> Inbox</a>
+        <a href="{{ url_for('order_lists') }}" class="{{ 'active' if request.endpoint == 'order_lists' else '' }}"><i class="fas fa-list"></i> Order Lists</a>
+        <a href="{{ url_for('product_stock') }}" class="{{ 'active' if request.endpoint == 'product_stock' else '' }}"><i class="fas fa-cubes"></i> Product Stock</a>
+        <a href="{{ url_for('user_management') }}" class="{{ 'active' if request.endpoint == 'user_management' else '' }}"><i class="fas fa-users"></i> User Management</a>
+        <h6>PAGES</h6>
+        <a href="{{ url_for('pricing') }}" class="{{ 'active' if request.endpoint == 'pricing' else '' }}" style="display: none;"><i class="fas fa-money-bill"></i> Pricing</a>
+        <a href="{{ url_for('calendar') }}" class="{{ 'active' if request.endpoint == 'calendar' else '' }}"><i class="fas fa-calendar"></i> Calendar</a>
+        <a href="{{ url_for('to_do_list') }}" class="{{ 'active' if request.endpoint == 'to_do_list' else '' }}"><i class="fas fa-check-circle"></i> To-Do</a>
+        <a href="{{ url_for('contact') }}" class="{{ 'active' if request.endpoint == 'contact' else '' }}"><i class="fas fa-address-book"></i> Contact</a>
+        <a href="{{ url_for('invoices') }}" class="{{ 'active' if request.endpoint == 'invoices' else '' }}"><i class="fas fa-file-invoice"></i> Invoice</a>
+        <a href="{{ url_for('setting') }}" class="{{ 'active' if request.endpoint == 'setting' else '' }}"><i class="fas fa-cog"></i> Settings</a>
+        <a href="{{ url_for('logout') }}" class="{{ 'active' if request.endpoint == 'logout' else '' }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h4>Favorites</h4>
+            <div class="d-flex align-items-center">
+                <!-- <button class="btn btn-outline-secondary me-2"><i class="fas fa-bell me-1"></i></button> -->
+                <div class="dropdown me-2">
+                    <!-- <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown"> -->
+                        <!-- <img src="https://flagcdn.com/16x12/gb.png" alt="Flag" class="me-1"> English
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li><a class="dropdown-item" href="#">Spanish</a></li>
+                        <li><a class="dropdown-item" href="#">French</a></li>
+                    </ul> -->
+                </div>
+                <div class="user-profile">
+                    <!-- <img src="https://via.placeholder.com/40" alt="Profile"> -->
+                    <div class="user-info">
+                        <span class="name">{{ admin['first_name'] }} {{ admin['last_name'] }}</span>
+                        <span class="role">Admin</span>
+                    </div>
+                    <!-- <i class="fas fa-chevron-down dropdown-icon"></i> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Favourites Grid -->
+        <div class="favourites-grid">
+            <div class="row">
+                {% for product in favorites %}
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="favourite-card">
+                        <div class="image-container">
+                            <img src="{{ product.image_url or 'https://via.placeholder.com/200x300?text=' + product.product_name }}" alt="{{ product.product_name }}">
+                        </div>
+                        <div class="card-body">
+                            <h5>{{ product.product_name }}</h5>
+                            <p class="price">{{ product.price_m | format_currency }} VNĐ</p>
+                            <div class="rating">
+                                <span class="stars">
+                                    {% set avg_rating = (product.avg_rating | float | default(0)) %}
+                                    {% set full_stars = (avg_rating // 1) | int %}
+                                    {% set has_half = (avg_rating % 1 >= 0.5) %}
+                                    {% for i in range(5) %}
+                                        {% if i < full_stars %}
+                                            <i class="fas fa-star"></i>
+                                        {% elif i == full_stars and has_half %}
+                                            <i class="fas fa-star-half-alt half"></i>
+                                        {% else %}
+                                            <i class="fas fa-star inactive"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </span>
+                                <span class="avg-rating">| {{ avg_rating | float | round(1) }}</span>
+                            </div>
+                            <button class="btn btn-outline-danger remove-favorite-btn"
+                                    data-product-id="{{ product.product_id }}">
+                                <i class="fas fa-trash me-1"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Logout Confirmation Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to logout?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('logout') }}'">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Format currency
+        function formatCurrency(value) {
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Remove Favorite Script
+        document.querySelectorAll('.remove-favorite-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const productId = button.getAttribute('data-product-id');
+                if (confirm(`Are you sure you want to remove this product from favorites?`)) {
+                    fetch(`/favorite/remove`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ product_id: productId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            button.closest('.col-md-6').remove();
+                            alert('Removed from favorites!');
+                        } else {
+                            alert('Failed to remove from favorites: ' + data.message);
+                        }
+                    })
+                    .catch(error => alert('Error: ' + error.message));
+                }
+            });
+        });
+    </script>
+</body>
+</html>

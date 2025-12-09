@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Orders</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #ffffff;
+      }
+      .btn-custom-discard {
+        background-color: #fff3cd;
+        color: #000;
+        border: 1px solid #ffeeba;
+        border-radius: 0;
+      }
+      .btn-custom-discard:hover {
+        text-decoration: underline;
+        background-color: #fff3cd;
+        color: #000;
+        border: 1px solid #ffeeba;
+      }
+      .btn-custom-button {
+        background-color: rgb(106, 122, 0);
+        color: #fff;
+        border-radius: 0;
+      }
+      .btn-custom-button:hover {
+        text-decoration: underline;
+        color: white;
+        background-color: rgb(106, 122, 0);
+      }
+      .custom-a {
+        font-family: "Azeret Mono", monospace;
+        text-decoration: none;
+        color: rgb(106, 122, 0);
+      }
+      .custom-a:hover {
+        text-decoration: underline;
+      }
+      .footer {
+        margin-top: 20px;
+        padding: 40px;
+        background-color: #d4e157;
+      }
+      .footer-main {
+        color: black;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+      }
+      .footer-left h1 {
+        padding-top: 48px;
+        font-family: Arial, sans-serif;
+        color: black;
+        font-size: 80px;
+        font-weight: 900;
+      }
+      .star-icon {
+        width: 68px;
+        height: 68px;
+        object-fit: contain;
+        margin-bottom: 10px;
+        animation: rotate360 5s linear infinite;
+      }
+      @keyframes rotate360 {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .footer-center ul {
+        list-style: none;
+        padding: 0;
+        font-size: 14px;
+      }
+      .footer-center li {
+        margin: 5px 0;
+      }
+      footer-right {
+        padding-top: 60px;
+      }
+      .footer-right p {
+        font-size: 14px;
+        margin: 5px 0;
+      }
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        flex-wrap: wrap;
+        border-top: 1px solid rgb(0, 0, 0);
+        padding-top: 20px;
+      }
+      .social-icons {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+      .icon-circle {
+        background-color: black;
+        color: #d4e157;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        text-decoration: none;
+        transition: transform 0.3s, background-color 0.3s;
+      }
+      .icon-circle i {
+        font-size: 16px;
+      }
+      .footer-links a {
+        margin-right: 15px;
+        text-decoration: none;
+        color: black;
+      }
+      .footer-right,
+      .footer-center {
+        font-family: azeret-mono, "azeret mono", monospace;
+      }
+      .footer-center {
+        padding-top: 60px;
+      }
+      @media (min-width: 768px) {
+        .footer-right {
+          padding-right: 100px;
+        }
+      }
+      .table th,
+      .table td {
+        vertical-align: middle;
+        font-family: 'Azeret Mono', monospace;
+        font-size: 16px;
+        padding: 12px 15px;
+        border: 1px solid #dee2e6;
+      }
+      .table th {
+        background-color: #f8f9fa;
+        color: #000;
+        font-weight: 600;
+        text-align: center;
+      }
+      .table td {
+        background-color: #fff;
+      }
+      .table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      .table .order-id-cell {
+        font-weight: bold;
+        text-align: left;
+        min-width: 100px;
+      }
+      .table .product-name {
+        text-align: left;
+        min-width: 200px;
+      }
+      .table .order-date,
+      .table .status,
+      .table .action,
+      .table .total-order-amount {
+        text-align: center;
+        min-width: 100px;
+      }
+      .status-pending {
+        color: #ffc107;
+        font-weight: bold;
+      }
+      .status-shipped {
+        color: #28a745;
+        font-weight: bold;
+      }
+      .status-delivered {
+        color: #17a2b8;
+        font-weight: bold;
+      }
+      .order-row-group {
+        border-top: 2px solid #dee2e6;
+      }
+      .order-total {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+      @media (max-width: 768px) {
+        .table th,
+        .table td {
+          font-size: 14px;
+          padding: 8px 10px;
+        }
+        .table .product-name {
+          min-width: 150px;
+        }
+        .table .order-id-cell,
+        .table .order-date,
+        .table .status,
+        .table .action,
+        .table .total-order-amount {
+          min-width: 80px;
+        }
+      }
+      .card {
+        border-width: 1px 0 1px 0;
+        border-style: solid;
+        border-color: #ccc;
+        border-radius: 0;
+      }
+      .filter-container {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .filter-container label {
+        font-family: 'Azeret Mono', monospace;
+        font-size: 14px;
+      }
+      .filter-container input[type="date"] {
+        padding: 5px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        font-family: 'Azeret Mono', monospace;
+        font-size: 14px;
+      }
+      .filter-container button {
+        font-family: 'Azeret Mono', monospace;
+        font-size: 14px;
+        padding: 5px 10px;
+        border-radius: 4px;
+      }
+      .nav-container22 {
+        font-family: "Azeret Mono", monospace;
+        background-color: #ffffff;
+        padding: 10px 0;
+        margin-bottom: 20px;
+      }
+      .nav-list22 {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 20px;
+      }
+      .nav-item22 {
+        font-family: "Azeret Mono", monospace;
+      }
+      .nav-link22 {
+        text-decoration: none;
+        color: #000;
+        font-family: "Azeret Mono", monospace;
+        font-size: 16px;
+        padding: 8px 12px;
+        transition: color 0.3s;
+      }
+      .nav-link22:hover {
+        color: rgb(106, 122, 0);
+      }
+      .nav-link22.active {
+        color: rgb(106, 122, 0);
+        font-weight: bold;
+        border-bottom: 2px solid rgb(106, 122, 0);
+      }
+      /* navbar */
+.navbar-center .nav-home {
+    background-color: white;
+    color: black;
+}
+.navbar {
+    font-family: 'Azeret Mono', Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: transparent;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    width: 100%;
+    box-sizing: border-box;
+    transition: transform 0.3s ease; /* Thêm transition cho hiệu ứng ẩn/hiện */
+}
+
+.navbar.hidden {
+    transform: translateY(-100%); /* Ẩn navbar bằng cách dịch chuyển lên trên */
+}
+
+.navbar-left {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    padding: 8px 16px;
+    z-index: 10000;
+}
+
+.navbar-center {
+    display: flex;
+    gap: 15px;
+    z-index: 10000;
+}
+
+.navbar-center a {
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;
+    padding: 8px 16px;
+    border: 1px solid #000;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.navbar-center a:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
+}
+
+.navbar-center .active {
+    background-color: black;
+    color: white;
+    border: 1px solid #000;
+}
+
+.navbar-center .active:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
+}
+
+.navbar-right {
+    display: flex;
+    gap: 15px;
+    z-index: 10000;
+}
+
+.navbar-right a {
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;
+    padding: 8px 16px;
+    border: 1px solid #000;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.navbar-right a:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
+}
+
+.navbar-right .highlight {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #000;
+    font-weight: bold;
+}
+
+.navbar-right .highlight:hover {
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
+}
+    </style>
+  </head>
+  <body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">DONKIES</div>
+        <div class="navbar-center">
+            <a href="/" class="nav-home">HOME</a>
+            <a href="/#about-section" class="nav-about">ABOUT</a>
+            <a href="/products" class="nav-products">PRODUCTS</a>
+            <a href="/#gallery-wrapper" class="nav-media">MEDIA</a>
+            {% if session.customer_id %}
+                <a href="/acc/myACC/my_account.html" class="nav-account active">myACCOUNT</a>
+            {% else %}
+                <a href="/login" class="nav-account">myACCOUNT</a>
+            {% endif %}
+        </div>
+        <div class="navbar-right">
+            {% if session.customer_id %}
+                <a href="/logout" class="nav-logout highlight">LOGOUT</a>
+            {% else %}
+                <a href="/login" class="nav-login highlight">LOGIN</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+      <!-- Navigation Bar -->
+      <nav class="nav-container22">
+        <ul class="nav-list22">
+          <li class="nav-item22">
+            <a class="nav-link22" href="my_account.html" data-tab="my-account22">My Account</a>
+          </li>
+          <li class="nav-item22">
+            <a class="nav-link22 active" href="my_order.html" data-tab="my-orders22">My Orders</a>
+          </li>
+          <li class="nav-item22">
+            <a class="nav-link22" href="my_address.html" data-tab="my-addresses22">My Addresses</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Order Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2>My Orders</h2>
+          <p class="text-muted">
+            View your order history or check the status of recent orders.
+          </p>
+        </div>
+        <div class="filter-container">
+          <label for="startDate">From:</label>
+          <input type="date" id="startDate" />
+          <label for="endDate">To:</label>
+          <input type="date" id="endDate" />
+          <button class="btn btn-custom-button" onclick="applyDateFilter()">Filter</button>
+        </div>
+      </div>
+
+      <!-- Order Table -->
+      <div class="card px-4 py-5 my-5">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="order-id-cell">Order ID</th>
+                <th class="product-name">Product Name</th>
+                <th class="order-date">Order Date</th>
+                <th class="status">Status</th>
+                <th class="action">Action</th>
+                <th class="total-order-amount">Total Order Amount</th>
+              </tr>
+            </thead>
+            <tbody id="orderTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Order Details Modal -->
+      <div
+        class="modal fade"
+        id="orderDetailsModal"
+        tabindex="-1"
+        aria-labelledby="orderDetailsModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="orderDetailsModalLabel">
+                Order Details
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <h6 id="modalOrderId"></h6>
+              <p id="modalOrderInfo" class="text-muted"></p>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th class="product-name">Product Name</th>
+                      <th class="unit-price">Unit Price</th>
+                      <th class="total-price">Total Price</th>
+                      <th class="quantity">Quantity</th>
+                      <th class="size">Size</th>
+                      <th class="action">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="modalOrderItems"></tbody>
+                </table>
+              </div>
+              <div id="modalOrderTotal" class="order-total"></div>
+              <h6 class="mt-4">Shipping Information</h6>
+              <p id="modalShippingAddress"></p>
+              <p id="modalPaymentMethod"></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-custom-button">
+                Contact Support
+              </button>
+              <button
+                type="button"
+                class="btn btn-custom-discard"
+                id="cancelOrderBtn"
+                style="display: none;"
+              >
+                Cancel Order
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-main">
+        <div class="footer-left">
+          <h1>DONKIES <img src="{{ url_for('serve_assets', filename='logo2.png') }}" alt="star icon" class="star-icon"></h1>
+        </div>
+        <div class="footer-center">
+          <ul>
+            <li>HOME</li>
+            <li>ABOUT</li>
+            <li>PRODUCTS</li>
+            <li>MEDIA</li>
+            <li>myACCOUNT</li>
+          </ul>
+        </div>
+        <div class="footer-right">
+          <p>ABC@GMAIL.COM</p>
+          <p>123-456-7890</p>
+          <p>123 HAI BA TRUNG</p>
+          <p>DONG DA, HA NOI</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="social-icons">
+          <a href="#" class="icon-circle"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="icon-circle"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="icon-circle"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="icon-circle"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <div class="footer-links">
+          <a href="{{ url_for('serve_assets', filename='privacy.html') }}">Privacy Policy</a>
+          <a href="{{ url_for('serve_assets', filename='privacy.html') }}">Accessibility Statement</a>
+        </div>
+        <div class="copyright">
+          © 2025 by G2 vo dich.
+        </div>
+      </div>
+    </footer>
+
+    <script
+      src="https://kit.fontawesome.com/6026c58141.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      //hide navbar
+      document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.navbar');
+    const modalDialog = document.querySelector('.modal-dialog.modal-lg');
+
+    if (modalDialog) {
+        const modal = modalDialog.closest('.modal');
+        if (modal) {
+            modal.addEventListener('show.bs.modal', function() {
+                navbar.classList.add('hidden');
+            });
+
+            modal.addEventListener('hidden.bs.modal', function() {
+                navbar.classList.remove('hidden');
+            });
+        }
+    }
+});
+
+
+      // Navbar scroll behavior
+      let lastScrollTop = 0;
+      let hideTimeout = null;
+
+      window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.nav-container22');
+        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (hideTimeout) {
+          clearTimeout(hideTimeout);
+        }
+
+        if (currentScrollTop < lastScrollTop) {
+          navbar.classList.remove('hidden');
+        } else if (currentScrollTop > lastScrollTop && currentScrollTop > 0) {
+          hideTimeout = setTimeout(() => {
+            navbar.classList.add('hidden');
+          }, 500);
+        }
+
+        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+      });
+
+      // Constants for HTML templates and configuration
+      const NO_ORDERS_MESSAGE = `
+        <tr>
+          <td colspan="6" class="text-center">No orders found for the selected date range.</td>
+        </tr>
+      `;
+      const ERROR_MESSAGE = (startDate, endDate) => `
+        <tr>
+          <td colspan="6" class="text-center">
+            Unable to load orders due to an error. 
+            <button class="btn btn-custom-button mt-2" onclick="retryFetchOrders('${startDate}', '${endDate}')">Try Again</button>
+          </td>
+        </tr>
+      `;
+      const LOADING_MESSAGE = `
+        <tr>
+          <td colspan="6" class="text-center">Loading orders...</td>
+        </tr>
+      `;
+      const MAX_RETRIES = 3;
+      const FETCH_TIMEOUT_MS = 10000; // 10 seconds timeout
+
+      // Store retry counts for each date range
+      const retryCounts = new Map();
+
+      // Debounce utility to prevent rapid API calls
+      function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+      }
+
+      // Show non-blocking notification instead of alert
+      function showNotification(message, type = 'error') {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} alert-dismissible fade show`;
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '1000';
+        notification.innerHTML = `
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 5000);
+      }
+
+      // Validate date input
+      function isValidDate(dateString) {
+        const date = new Date(dateString);
+        return !isNaN(date.getTime()) && dateString.match(/^\d{4}-\d{2}-\d{2}$/);
+      }
+
+      // Fetch orders from API and populate table
+      async function fetchOrders(startDate = '', endDate = '', retryCount = 0) {
+        const orderTableBody = document.getElementById('orderTableBody');
+        if (!orderTableBody) {
+          console.error('Order table body not found');
+          showNotification('Error: Order table not found.');
+          return;
+        }
+
+        // Show loading state
+        orderTableBody.innerHTML = LOADING_MESSAGE;
+
+        try {
+          // Set default date range to last 30 days if no dates provided
+          if (!startDate && !endDate) {
+            const today = new Date();
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(today.getDate() - 30);
+
+            // Format dates to YYYY-MM-DD
+            startDate = thirtyDaysAgo.toISOString().split('T')[0];
+            endDate = today.toISOString().split('T')[0];
+
+            // Update input fields
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            if (startDateInput && endDateInput) {
+              startDateInput.value = startDate;
+              endDateInput.value = endDate;
+            }
+          }
+
+          // Build API URL
+          let url = '/api/orders';
+          if (startDate || endDate) {
+            const params = new URLSearchParams();
+            if (startDate) params.append('start_date', startDate);
+            if (endDate) params.append('end_date', endDate);
+            url += `?${params.toString()}`;
+          }
+
+          // Set up fetch with timeout
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+          const response = await fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+            signal: controller.signal,
+          });
+          clearTimeout(timeoutId);
+
+          if (!response.ok) {
+            if (response.status === 401) {
+              showNotification('Session expired. Please log in again.');
+              window.location.href = '/login';
+              return;
+            }
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const orders = await response.json();
+
+          // Validate response
+          if (!Array.isArray(orders)) {
+            throw new Error('Invalid response format: Expected an array');
+          }
+
+          // Reset retry count on successful fetch
+          retryCounts.delete(`${startDate}-${endDate}`);
+
+          if (orders.length === 0) {
+            orderTableBody.innerHTML = NO_ORDERS_MESSAGE;
+          } else {
+            populateOrderTable(orders);
+          }
+        } catch (error) {
+          console.error('Error fetching orders:', error);
+
+          // Handle specific errors
+          let errorMessage = 'Unable to load orders due to an error.';
+          if (error.name === 'AbortError') {
+            errorMessage = 'Request timed out. Please try again.';
+          } else if (error.message.includes('Failed to fetch')) {
+            errorMessage = 'Network error. Please check your connection.';
+          }
+
+          // Check retry limit
+          const key = `${startDate}-${endDate}`;
+          retryCount = (retryCounts.get(key) || 0) + 1;
+          if (retryCount >= MAX_RETRIES) {
+            orderTableBody.innerHTML = `
+              <tr>
+                <td colspan="6" class="text-center">
+                  ${errorMessage} Maximum retry attempts reached.
+                </td>
+              </tr>
+            `;
+            retryCounts.delete(key);
+            return;
+          }
+
+          retryCounts.set(key, retryCount);
+          orderTableBody.innerHTML = ERROR_MESSAGE(startDate, endDate);
+          showNotification(errorMessage);
+        }
+      }
+
+      // Debounced retry function
+      const retryFetchOrders = debounce((startDate, endDate) => {
+        const retryCount = retryCounts.get(`${startDate}-${endDate}`) || 0;
+        fetchOrders(startDate, endDate, retryCount);
+      }, 1000);
+
+      // Apply date filter
+      function applyDateFilter() {
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+
+        if (!startDateInput || !endDateInput) {
+          console.error('Input elements not found: startDate or endDate');
+          showNotification('Error: Date input fields not found.');
+          return;
+        }
+
+        const startDate = startDateInput.value;
+        const endDate = endDateInput.value;
+
+        // Validate inputs
+        if (!startDate || !endDate) {
+          showNotification('Please select both start and end dates.');
+          return;
+        }
+
+        if (!isValidDate(startDate) || !isValidDate(endDate)) {
+          showNotification('Please enter valid dates in YYYY-MM-DD format.');
+          return;
+        }
+
+        if (new Date(startDate) > new Date(endDate)) {
+          showNotification('Start date cannot be after end date.');
+          return;
+        }
+
+        // Prevent future dates
+        if (new Date(startDate) > new Date() || new Date(endDate) > new Date()) {
+          showNotification('Dates cannot be in the future.');
+          return;
+        }
+
+        // Call fetchOrders with validated dates
+        fetchOrders(startDate, endDate);
+      }
+
+      // Clear date filter and reset to default (last 30 days)
+      function clearDateFilter() {
+        try {
+          const startDateInput = document.getElementById('startDate');
+          const endDateInput = document.getElementById('endDate');
+
+          if (!startDateInput || !endDateInput) {
+            console.error('Input elements not found: startDate or endDate');
+            showNotification('Error: Date input fields not found.');
+            return;
+          }
+
+          startDateInput.value = '';
+          endDateInput.value = '';
+
+          // Reset to default 30-day filter
+          fetchOrders();
+        } catch (error) {
+          console.error('Error in clearDateFilter:', error);
+          showNotification('Failed to clear filter. Please try again.');
+        }
+      }
+
+      // Initialize orders when page loads
+      document.addEventListener('DOMContentLoaded', () => {
+        fetchOrders(); // Fetch orders with default 30-day filter
+      });
+
+      // Handle tab click for navigation
+      document.querySelectorAll('.nav-link22').forEach(tab => {
+        tab.addEventListener('click', function (event) {
+          event.preventDefault();
+          document.querySelectorAll('.nav-link22').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          if (this.getAttribute('data-tab') === 'my-orders22') {
+            fetchOrders();
+          } else {
+            window.location.href = this.getAttribute('href');
+          }
+        });
+      });
+
+      // Populate order table
+      function populateOrderTable(orders) {
+        const tbody = document.getElementById('orderTableBody');
+        tbody.innerHTML = '';
+
+        orders.forEach(order => {
+          const productCount = order.products.length;
+          order.products.forEach((product, index) => {
+            const row = document.createElement('tr');
+            if (index === 0) {
+              row.classList.add('order-row-group');
+              row.innerHTML = `
+                <td class="order-id-cell" rowspan="${productCount}">#${order.order_id}</td>
+                <td class="product-name">${product.product_name}</td>
+                <td class="order-date" rowspan="${productCount}">${order.order_date}</td>
+                <td class="status status-${order.status.toLowerCase()}" rowspan="${productCount}">${order.status}</td>
+                <td class="action" rowspan="${productCount}">
+                  <a href="#" class="custom-a" data-bs-toggle="modal" data-bs-target="#orderDetailsModal" data-order-id="${order.order_id}">View Details</a>
+                </td>
+                <td class="total-order-amount" rowspan="${productCount}">${order.total_amount.toLocaleString()} đ</td>
+              `;
+            } else {
+              row.innerHTML = `
+                <td class="product-name">${product.product_name}</td>
+              `;
+            }
+            tbody.appendChild(row);
+          });
+        });
+
+        // Add event listeners for View Details links
+        document.querySelectorAll('.custom-a[data-order-id]').forEach(link => {
+          link.addEventListener('click', function (event) {
+            event.preventDefault();
+            const orderId = this.getAttribute('data-order-id');
+            const order = orders.find(o => o.order_id === orderId);
+            populateModal(order);
+          });
+        });
+      }
+
+      // Populate modal with order details
+      async function populateModal(order) {
+        if (!order) return;
+
+        document.getElementById('modalOrderId').textContent = `Order #${order.order_id}`;
+        document.getElementById('modalOrderInfo').innerHTML = `Date: ${order.order_date} | Status: <span class="status-${order.status.toLowerCase()}">${order.status}</span>`;
+
+        const tbody = document.getElementById('modalOrderItems');
+        tbody.innerHTML = '';
+        for (const product of order.products) {
+          // Check if a review exists for this product, size, and order
+          const reviewResponse = await fetch(`/api/reviews?order_id=${order.order_id}&product_id=${product.product_id}&size_id=${product.size_id}`, {
+            method: 'GET',
+            credentials: 'include'
+          });
+          const reviewData = await reviewResponse.json();
+          const hasReview = reviewResponse.ok && reviewData.review_id;
+
+          // Determine action: show "Reviewed" if review exists, "Review" button if Delivered and no review, or nothing
+          let actionContent = '';
+          if (hasReview) {
+            actionContent = `<span class="text-muted">Reviewed</span>`;
+          } else if (order.status.toLowerCase() === 'delivered') {
+            actionContent = `<a href="/acc/myACC/review.html?order_id=${order.order_id}&product_id=${product.product_id}&size_id=${product.size_id}&product_name=${encodeURIComponent(product.product_name)}" class="custom-a ms-2">Review</a>`;
+          }
+
+          tbody.innerHTML += `
+            <tr>
+              <td class="product-name">${product.product_name}</td>
+              <td class="unit-price">${product.unit_price.toLocaleString()} đ</td>
+              <td class="total-price">${product.total_price.toLocaleString()} đ</td>
+              <td class="quantity">${product.quantity}</td>
+              <td class="size">${product.size}</td>
+              <td class="action">${actionContent}</td>
+            </tr>
+          `;
+        }
+
+        document.getElementById('modalOrderTotal').textContent = `Total: ${order.total_amount.toLocaleString()} đ`;
+        document.getElementById('modalShippingAddress').textContent = `Address: ${order.shipping_address}`;
+        
+        // Fetch payment method from payments table
+        fetchPaymentMethod(order.order_id).then(paymentMethod => {
+          document.getElementById('modalPaymentMethod').textContent = `Payment Method: ${paymentMethod || 'N/A'}`;
+        });
+
+        // Show or hide Cancel Order button based on order status
+        const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+        cancelOrderBtn.style.display = order.status.toLowerCase() === 'pending' ? 'inline-block' : 'none';
+
+        // Add event listener for Cancel Order button
+        cancelOrderBtn.onclick = async function () {
+          if (confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+            try {
+              const response = await fetch(`/api/orders/${order.order_id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+              });
+              if (!response.ok) {
+                throw new Error('Failed to cancel order');
+              }
+              const result = await response.json();
+              showNotification(result.message, 'success');
+              // Close modal
+              const modal = bootstrap.Modal.getInstance(document.getElementById('orderDetailsModal'));
+              modal.hide();
+              // Refresh orders
+              fetchOrders(document.getElementById('startDate').value, document.getElementById('endDate').value);
+            } catch (error) {
+              console.error('Error cancelling order:', error);
+              showNotification('Failed to cancel order. Please try again later.');
+            }
+          }
+        };
+      }
+
+      // Fetch payment method for an order
+      async function fetchPaymentMethod(orderId) {
+        try {
+          const response = await fetch(`/api/payments?order_id=${orderId}`, {
+            method: 'GET',
+            credentials: 'include',
+          });
+          if (!response.ok) {
+            throw new Error('Failed to fetch payment method');
+          }
+          const payment = await response.json();
+          return payment.payment_method;
+        } catch (error) {
+          console.error('Error fetching payment method:', error);
+          return 'N/A';
+        }
+      }
+    </script>
+  </body>
+</html>

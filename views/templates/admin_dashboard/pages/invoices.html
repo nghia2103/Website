@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoices</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" onload="console.log('Bootstrap CSS loaded')" onerror="console.error('Failed to load Bootstrap CSS')">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" onload="console.log('Font Awesome loaded')" onerror="console.error('Failed to load Font Awesome')">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a73e8;
+            padding: 20px 25px;
+            display: block;
+            text-align: center;
+        }
+        .sidebar a {
+            color: #5f6368;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+        }
+        .sidebar h6 {
+            color: #80868b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 15px 25px;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+        }
+        /* User Profile Styles */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+        }
+        .user-profile .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-profile .user-info .name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .user-profile .user-info .role {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .user-profile .dropdown-icon {
+            color: #6c757d;
+        }
+        /* Invoice List Styles */
+        .invoice-section {
+            margin-top: 20px;
+        }
+        .invoice-list {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .invoice-list h5 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .filter-form {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .filter-form .form-group {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+        .filter-form .form-group label {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .filter-form .form-group input {
+            width: 100%;
+            padding: 8px 8px 8px 35px;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+        .filter-form .form-group .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1rem;
+        }
+        .filter-form .btn {
+            font-size: 0.9rem;
+            padding: 8px 15px;
+            height: 38px;
+        }
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .invoice-table th, .invoice-table td {
+            padding: 10px;
+            text-align: left;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #e8ecef;
+        }
+        .invoice-table th {
+            font-weight: 600;
+            color: #6c757d;
+        }
+        .invoice-table tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .invoice-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        .status-paid {
+            color: #28a745;
+            font-weight: 500;
+        }
+        /* Modal Styles */
+        .modal-body p {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+        }
+        .modal-body p strong {
+            display: inline-block;
+            width: 120px;
+            flex-shrink: 0;
+        }
+        .modal-body p ul {
+            display: inline-block;
+            margin: 0;
+            padding-left: 20px;
+            list-style-type: disc;
+            vertical-align: top;
+        }
+        .modal-body p ul li {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .filter-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-form .form-group {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">DashStack</div>
+        <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' else '' }}"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="{{ url_for('admin_products') }}" class="{{ 'active' if request.endpoint == 'products' else '' }}"><i class="fas fa-box"></i> Products</a>
+        <a href="{{ url_for('favorites') }}" class="{{ 'active' if request.endpoint == 'favorites' else '' }}"><i class="fas fa-heart"></i> Favorites</a>
+        <a href="{{ url_for('inbox') }}" class="{{ 'active' if request.endpoint == 'inbox' else '' }}"><i class="fas fa-inbox"></i> Inbox</a>
+        <a href="{{ url_for('order_lists') }}" class="{{ 'active' if request.endpoint == 'order_lists' else '' }}"><i class="fas fa-list"></i> Order Lists</a>
+        <a href="{{ url_for('product_stock') }}" class="{{ 'active' if request.endpoint == 'product_stock' else '' }}"><i class="fas fa-cubes"></i> Product Stock</a>
+        <a href="{{ url_for('user_management') }}" class="{{ 'active' if request.endpoint == 'user_management' else '' }}"><i class="fas fa-users"></i> User Management</a>
+        <h6>PAGES</h6>
+        <a href="{{ url_for('pricing') }}" class="{{ 'active' if request.endpoint == 'pricing' else '' }}" style="display: none;"><i class="fas fa-money-bill"></i> Pricing</a>
+        <a href="{{ url_for('calendar') }}" class="{{ 'active' if request.endpoint == 'calendar' else '' }}"><i class="fas fa-calendar"></i> Calendar</a>
+        <a href="{{ url_for('to_do_list') }}" class="{{ 'active' if request.endpoint == 'to_do_list' else '' }}"><i class="fas fa-check-circle"></i> To-Do</a>
+        <a href="{{ url_for('contact') }}" class="{{ 'active' if request.endpoint == 'contact' else '' }}"><i class="fas fa-address-book"></i> Contact</a>
+        <a href="{{ url_for('invoices') }}" class="{{ 'active' if request.endpoint == 'invoices' else '' }}"><i class="fas fa-file-invoice"></i> Invoice</a>
+        <a href="{{ url_for('setting') }}" class="{{ 'active' if request.endpoint == 'setting' else '' }}"><i class="fas fa-cog"></i> Settings</a>
+        <a href="{{ url_for('logout') }}" class="{{ 'active' if request.endpoint == 'logout' else '' }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h4>Invoice</h4>
+            <div class="d-flex align-items-center">
+                <!-- <button class="btn btn-outline-secondary me-2"><i class="fas fa-bell me-1"></i></button> -->
+                <div class="dropdown me-2">
+                    <!-- <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown">
+                        <img src="https://flagcdn.com/16x12/gb.png" alt="Flag" class="me-1"> English
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li><a class="dropdown-item" href="#">Spanish</a></li>
+                        <li><a class="dropdown-item" href="#">French</a></li>
+                    </ul> -->
+                </div>
+                <!-- User Profile -->
+                <div class="user-profile">
+                    <!-- <img src="https://via.placeholder.com/40" alt="Profile"> -->
+                    <div class="user-info">
+                        <span class="name">{{ admin['first_name'] }} {{ admin['last_name'] }}</span>
+                        <span class="role">Admin</span>
+                    </div>
+                    <!-- <i class="fas fa-chevron-down dropdown-icon"></i> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice List Section -->
+        <div class="invoice-section">
+            <div class="invoice-list">
+                <h5>Invoice</h5>
+                <!-- Filter Form -->
+                <div class="filter-form">
+                    <div class="form-group">
+                        <label for="filterDate" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="filterDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="filterCustomer" class="form-label">Customer</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="form-control" id="filterCustomer" placeholder="Search customer...">
+                        </div>
+                    </div>
+                    <div class="form-group d-flex align-items-end">
+                        <button class="btn btn-primary" onclick="filterInvoices()">Filter</button>
+                    </div>
+                </div>
+                <table class="invoice-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice Code</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoice-list"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Invoice Detail Modal -->
+        <div class="modal fade" id="invoiceDetailModal" tabindex="-1" aria-labelledby="invoiceDetailModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="invoiceDetailModalLabel">Invoice Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="invoice-detail-content">
+                        <!-- Invoice details will be dynamically inserted here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="printInvoice()">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Confirmation Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to logout?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('logout') }}'">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" onload="console.log('Bootstrap JS loaded')" onerror="console.error('Failed to load Bootstrap JS')"></script>
+    <script>
+        let allInvoices = [];
+
+        // Load invoices into table
+        function loadInvoices(invoices) {
+            const invoiceList = document.getElementById('invoice-list');
+            if (!invoiceList) {
+                console.error("Element 'invoice-list' not found");
+                return;
+            }
+            invoiceList.innerHTML = '';
+            if (invoices.length === 0) {
+                invoiceList.innerHTML = '<tr><td colspan="5">No invoices found.</td></tr>';
+                return;
+            }
+            invoices.forEach((invoice, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${invoice.code}</td>
+                    <td>${invoice.customer_name}</td>
+                    <td>${new Date(invoice.date).toLocaleDateString('en-GB')}</td>
+                    <td>${invoice.total_price.toLocaleString('vi-VN')} VNĐ</td>
+                    <td class="status-paid">Delivered</td>
+                `;
+                tr.addEventListener('click', () => showInvoiceDetails(index, invoices));
+                invoiceList.appendChild(tr);
+            });
+        }
+
+        // Fetch invoices from API
+        function fetchInvoices(filters = {}) {
+            const query = new URLSearchParams(filters).toString();
+            fetch(`/api/invoices?${query}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    allInvoices = data.invoices;
+                    loadInvoices(allInvoices);
+                })
+                .catch(error => {
+                    console.error('Error fetching invoices:', error);
+                    document.getElementById('invoice-list').innerHTML = '<tr><td colspan="5">Error loading invoices.</td></tr>';
+                });
+        }
+
+        // Filter invoices based on user input
+        function filterInvoices() {
+            const filterDate = document.getElementById('filterDate');
+            const filterCustomer = document.getElementById('filterCustomer');
+
+            if (!filterDate || !filterCustomer) {
+                console.error("One or more filter elements not found");
+                return;
+            }
+
+            const filters = {};
+            if (filterDate.value) filters.date = filterDate.value;
+            if (filterCustomer.value.trim()) filters.customer = filterCustomer.value.trim();
+
+            fetchInvoices(filters);
+        }
+
+        // Show invoice details in modal
+        function showInvoiceDetails(index, invoices) {
+            const invoice = invoices[index];
+            const detailContent = document.getElementById('invoice-detail-content');
+            if (!detailContent) {
+                console.error("Element 'invoice-detail-content' not found");
+                return;
+            }
+            let productsHtml = '<ul>';
+            if (invoice.products && invoice.products.length > 0) {
+                invoice.products.forEach(product => {
+                    productsHtml += `<li>${product.product_name} x${product.quantity} (${product.size})</li>`;
+                });
+            } else {
+                productsHtml += '<li>No products found.</li>';
+            }
+            productsHtml += '</ul>';
+            detailContent.innerHTML = `
+                <p><strong>Invoice Code:</strong> ${invoice.code}</p>
+                <p><strong>Customer:</strong> ${invoice.customer_name}</p>
+                <p><strong>Date:</strong> ${new Date(invoice.date).toLocaleDateString('en-GB')}</p>
+                <p><strong>Product:</strong> ${productsHtml}</p>
+                <p><strong>Amount:</strong> ${invoice.total_price.toLocaleString('vi-VN')} VNĐ</p>
+                <p><strong>Status:</strong> Delivered</p>
+                <p><strong>Description:</strong> ${invoice.description || 'No description provided.'}</p>
+            `;
+            const modalElement = document.getElementById('invoiceDetailModal');
+            if (!modalElement) {
+                console.error("Element 'invoiceDetailModal' not found");
+                return;
+            }
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+
+        // Print invoice
+        function printInvoice() {
+            const detailContent = document.getElementById('invoice-detail-content');
+            if (!detailContent) {
+                console.error("Element 'invoice-detail-content' not found for printing");
+                return;
+            }
+            const printVista = window.open('', '_blank');
+            printVista.document.write(`
+                <html>
+                    <head>
+                        <title>Invoice</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            p { margin-bottom: 10px; display: flex; align-items: flex-start; }
+                            strong { display: inline-block; width: 120px; flex-shrink: 0; }
+                            ul { display: inline-block; margin: 0; padding-left: 20px; list-style-type: disc; vertical-align: top; }
+                            li { font-size: 0.95rem; margin-bottom: 5px; }
+                        </style>
+                    </head>
+                    <body>
+                        <h2>Invoice Details</h2>
+                        ${detailContent.innerHTML}
+                    </body>
+                </html>
+            `);
+            printVista.document.close();
+            printVista.print();
+        }
+
+        // Load invoices when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Page loaded, fetching invoices...");
+            fetchInvoices();
+
+            // Thêm sự kiện keyup cho ô tìm kiếm khách hàng
+            const filterCustomer = document.getElementById('filterCustomer');
+            if (filterCustomer) {
+                filterCustomer.addEventListener('keyup', (e) => {
+                    if (e.key === 'Enter') {
+                        filterInvoices();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

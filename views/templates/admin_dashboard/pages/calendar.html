@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a73e8;
+            padding: 20px 25px;
+            display: block;
+            text-align: center;
+        }
+        .sidebar a {
+            color: #5f6368;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+        }
+        .sidebar h6 {
+            color: #80868b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 15px 25px;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+        }
+        /* User Profile Styles */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+        }
+        .user-profile .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-profile .user-info .name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .user-profile .user-info .role {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .user-profile .dropdown-icon {
+            color: #6c757d;
+        }
+        /* Calendar Section Styles */
+        .calendar-section {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+        /* Events List Styles */
+        .events-list {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .events-list h5 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .create-event-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .event-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .event-item:hover {
+            background-color: #f8f9fa;
+        }
+        .event-item .event-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e8f0fe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        .event-item .event-details {
+            flex: 1;
+        }
+        .event-item .event-details .time {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .event-item .event-details .manager {
+            font-size: 0.85rem;
+            color: #333;
+            font-weight: 500;
+        }
+        .see-more {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .see-more a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        /* Calendar Styles */
+        .calendar {
+            flex: 3;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .calendar-header .month {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .calendar-header .view-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .calendar-header .view-buttons .btn {
+            font-size: 0.9rem;
+            padding: 5px 15px;
+        }
+        .calendar-header .view-buttons .btn.active {
+            background-color: #1a73e8;
+            color: white;
+            border-color: #1a73e8;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background-color: #e8ecef;
+            border-radius: 5px;
+        }
+        .calendar-grid .day-header {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #6c757d;
+        }
+        .calendar-grid .day {
+            background-color: white;
+            min-height: 100px;
+            padding: 5px;
+            position: relative;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        .calendar-grid .day.disabled {
+            background-color: #f8f9fa;
+            color: #ccc;
+        }
+        /* Event Day Styles */
+        .day.event-green {
+            border: 3px solid #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #333;
+        }
+        .day.event-blue {
+            border: 3px solid #007bff;
+            background-color: rgba(0, 123, 255, 0.1);
+            color: #333;
+        }
+        .day.event-pink {
+            border: 3px solid #e83e8c;
+            background-color: rgba(232, 62, 140, 0.1);
+            color: #333;
+        }
+        .day.event-purple {
+            border: 3px solid #6f42c1;
+            background-color: rgba(111, 66, 193, 0.1);
+            color: #333;
+        }
+        .day.event-orange {
+            border: 3px solid #fd7e14;
+            background-color: rgba(253, 126, 20, 0.1);
+            color: #333;
+        }
+        .day.event-yellow {
+            border: 3px solid #ffc107;
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #333;
+        }
+        .day.event-red {
+            border: 3px solid #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #333;
+        }
+        .event-content {
+            margin-top: 5px;
+            font-size: 0.8rem;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .calendar-section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">DashStack</div>
+        <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' else '' }}"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="{{ url_for('admin_products') }}" class="{{ 'active' if request.endpoint == 'products' else '' }}"><i class="fas fa-box"></i> Products</a>
+        <a href="{{ url_for('favorites') }}" class="{{ 'active' if request.endpoint == 'favorites' else '' }}"><i class="fas fa-heart"></i> Favorites</a>
+        <a href="{{ url_for('inbox') }}" class="{{ 'active' if request.endpoint == 'inbox' else '' }}"><i class="fas fa-inbox"></i> Inbox</a>
+        <a href="{{ url_for('order_lists') }}" class="{{ 'active' if request.endpoint == 'order_lists' else '' }}"><i class="fas fa-list"></i> Order Lists</a>
+        <a href="{{ url_for('product_stock') }}" class="{{ 'active' if request.endpoint == 'product_stock' else '' }}"><i class="fas fa-cubes"></i> Product Stock</a>
+        <a href="{{ url_for('user_management') }}" class="{{ 'active' if request.endpoint == 'user_management' else '' }}"><i class="fas fa-users"></i> User Management</a>
+        <h6>PAGES</h6>
+        <a href="{{ url_for('pricing') }}" class="{{ 'active' if request.endpoint == 'pricing' else '' }}" style="display: none;"><i class="fas fa-money-bill"></i> Pricing</a>
+        <a href="{{ url_for('calendar') }}" class="{{ 'active' if request.endpoint == 'calendar' else '' }}"><i class="fas fa-calendar"></i> Calendar</a>
+        <a href="{{ url_for('to_do_list') }}" class="{{ 'active' if request.endpoint == 'to_do_list' else '' }}"><i class="fas fa-check-circle"></i> To-Do</a>
+        <a href="{{ url_for('contact') }}" class="{{ 'active' if request.endpoint == 'contact' else '' }}"><i class="fas fa-address-book"></i> Contact</a>
+        <a href="{{ url_for('invoices') }}" class="{{ 'active' if request.endpoint == 'invoices' else '' }}"><i class="fas fa-file-invoice"></i> Invoice</a>
+        <a href="{{ url_for('setting') }}" class="{{ 'active' if request.endpoint == 'setting' else '' }}"><i class="fas fa-cog"></i> Settings</a>
+        <a href="{{ url_for('logout') }}" class="{{ 'active' if request.endpoint == 'logout' else '' }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h4>Calendar</h4>
+            <div class="d-flex align-items-center">
+                <!-- <button class="btn btn-outline-secondary me-2"><i class="fas fa-bell me-1"></i></button> -->
+                <div class="dropdown me-2">
+                    <!-- <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown">
+                        <img src="https://flagcdn.com/16x12/gb.png" alt="Flag" class="me-1"> English
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li><a class="dropdown-item" href="#">Spanish</a></li>
+                        <li><a class="dropdown-item" href="#">French</a></li>
+                    </ul> -->
+                </div>
+                <!-- User Profile -->
+                <div class="user-profile">
+                    <!-- <img src="https://via.placeholder.com/40" alt="Profile"> -->
+                    <!-- <div class="user-info">
+                        <span class="name">Mori Roy</span>
+                        <span class="role">Admin</span>
+                    </div> -->
+                    <!-- <i class="fas fa-chevron-down dropdown-icon"></i> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Section -->
+        <div class="calendar-section">
+            <!-- Events List -->
+            <div class="events-list">
+                <h5>You are going to</h5>
+                <div class="create-event-btn">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEventModal">
+                        <i class="fas fa-plus me-1"></i> Create Event
+                    </button>
+                </div>
+                <div id="event-list"></div>
+                <div class="see-more">
+                    <a href="#">See More</a>
+                </div>
+            </div>
+
+            <!-- Create Event Modal -->
+            <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createEventModalLabel">Create New Event</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="eventName" class="form-label">Event Name</label>
+                                <input type="text" class="form-control" id="eventName" placeholder="Enter event name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="eventDate" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="eventDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="eventTime" class="form-label">Time</label>
+                                <input type="time" class="form-control" id="eventTime" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="eventManager" class="form-label">Manager</label>
+                                <select class="form-control" id="eventManager" required>
+                                    <option value="" disabled selected>Select an admin</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="saveEvent()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar -->
+            <div class="calendar">
+                <div class="calendar-header">
+                    <div class="month">
+                        <i class="fas fa-chevron-left me-2" onclick="changeMonth(-1)"></i>
+                        <span id="month-year"></span>
+                        <i class="fas fa-chevron-right ms-2" onclick="changeMonth(1)"></i>
+                    </div>
+                    <div class="view-buttons">
+                        <button class="btn btn-outline-primary">Day</button>
+                        <button class="btn btn-outline-primary">Week</button>
+                        <button class="btn btn-outline-primary active">Month</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- Day Headers -->
+                    <div class="day-header">MON</div>
+                    <div class="day-header">TUE</div>
+                    <div class="day-header">WED</div>
+                    <div class="day-header">THU</div>
+                    <div class="day-header">FRI</div>
+                    <div class="day-header">SAT</div>
+                    <div class="day-header">SUN</div>
+                    <!-- Days will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+        <!-- Logout Confirmation Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to logout?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='product.html'">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentDate = new Date('2025-06-01');
+        let events = [];
+
+        // Hàm tạo lịch
+        function generateCalendar(date) {
+            const monthYear = document.getElementById('month-year');
+            const calendarGrid = document.getElementById('calendar-grid');
+            const month = date.getMonth();
+            const year = date.getFullYear();
+
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+            monthYear.textContent = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const lastDayPrevMonth = new Date(year, month, 0).getDate();
+
+            while (calendarGrid.children.length > 7) {
+                calendarGrid.removeChild(calendarGrid.lastChild);
+            }
+
+            const adjustedFirstDay = (firstDay === 0) ? 6 : firstDay - 1;
+            for (let i = 0; i < adjustedFirstDay; i++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day disabled';
+                dayDiv.textContent = lastDayPrevMonth - (adjustedFirstDay - i - 1);
+                calendarGrid.appendChild(dayDiv);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day';
+                dayDiv.textContent = day;
+
+                const dayEvents = events.filter(event => {
+                    const eventDate = new Date(event.date);
+                    return eventDate.getDate() === day && 
+                           eventDate.getMonth() === month && 
+                           eventDate.getFullYear() === year;
+                });
+
+                if (dayEvents.length > 0) {
+                    const eventColor = dayEvents[0].color || 'blue';
+                    dayDiv.classList.add(`event-${eventColor}`);
+
+                    const eventsContainer = document.createElement('div');
+                    eventsContainer.className = 'event-content';
+                    dayEvents.forEach(event => {
+                        const eventText = document.createElement('div');
+                        eventText.textContent = event.adminname;
+                        eventText.title = `${event.event_name} at ${event.time} by ${event.adminname}`;
+                        eventsContainer.appendChild(eventText);
+                    });
+                    dayDiv.appendChild(eventsContainer);
+                }
+
+                calendarGrid.appendChild(dayDiv);
+            }
+
+            const totalDays = adjustedFirstDay + daysInMonth;
+            const remainingDays = (totalDays % 7 === 0) ? 0 : 7 - (totalDays % 7);
+            for (let i = 1; i <= remainingDays; i++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day disabled';
+                dayDiv.textContent = i;
+                calendarGrid.appendChild(dayDiv);
+            }
+        }
+
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            generateCalendar(currentDate);
+            fetchEvents();
+        }
+
+        // Hàm lấy danh sách admin
+        async function fetchAdmins() {
+            const managerSelect = document.getElementById('eventManager');
+            try {
+                console.log('Fetching admins from /get_admins...');
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+                const response = await fetch('/get_admins', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Response from /get_admins:', data);
+
+                managerSelect.innerHTML = '<option value="" disabled selected>Select an admin</option>';
+
+                if (data.success && Array.isArray(data.admins) && data.admins.length > 0) {
+                    data.admins.forEach(admin => {
+                        const option = document.createElement('option');
+                        option.value = JSON.stringify({
+                            admin_id: admin.admin_id,
+                            adminname: `${admin.first_name} ${admin.last_name}`
+                        });
+                        option.textContent = `${admin.first_name} ${admin.last_name}`;
+                        managerSelect.appendChild(option);
+                    });
+                } else {
+                    console.warn('No admins found or error:', data.message || 'Empty data');
+                    const noAdminOption = document.createElement('option');
+                    noAdminOption.textContent = 'No admins found';
+                    noAdminOption.disabled = true;
+                    managerSelect.appendChild(noAdminOption);
+                }
+            } catch (error) {
+                console.error('Error fetching admins:', error.message);
+                managerSelect.innerHTML = '<option value="" disabled selected>Error loading admins</option>';
+            }
+        }
+
+        // Hàm lấy danh sách sự kiện
+        async function fetchEvents() {
+            try {
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth() + 1;
+                console.log(`Fetching events for ${year}-${month}...`);
+                const response = await fetch(`/get_events?year=${year}&month=${month}`);
+                const data = await response.json();
+                if (data.success) {
+                    events = data.events || [];
+                    console.log('Events fetched:', events);
+                    renderEvents();
+                    generateCalendar(currentDate);
+                } else {
+                    console.error('Failed to fetch events:', data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        }
+
+        // Hàm hiển thị danh sách sự kiện
+        function renderEvents() {
+            const eventList = document.getElementById('event-list');
+            eventList.innerHTML = '';
+            events.forEach(event => {
+                const dateParts = event.date.split('-');
+                const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+                const timeParts = event.time.split(':');
+                const hours = parseInt(timeParts[0], 10);
+                const minutes = timeParts[1];
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                const formattedHours = hours % 12 || 12;
+                const formattedTime = `${formattedHours}:${minutes} ${ampm}`;
+
+                const eventItem = document.createElement('div');
+                eventItem.className = 'event-item';
+                eventItem.innerHTML = `
+                    <div class="event-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="event-details">
+                        <div class="time">${event.event_name} - ${formattedTime}, ${formattedDate}</div>
+                        <div class="manager">${event.adminname}</div>
+                    </div>
+                `;
+                eventList.appendChild(eventItem);
+            });
+        }
+
+        // Hàm lưu sự kiện
+        async function saveEvent() {
+            const eventName = document.getElementById('eventName').value;
+            const eventDate = document.getElementById('eventDate').value;
+            const eventTime = document.getElementById('eventTime').value;
+            const managerData = JSON.parse(document.getElementById('eventManager').value || '{}');
+
+            if (!eventName || !eventDate || !eventTime || !managerData.admin_id) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            const colors = ['green', 'blue', 'pink', 'purple', 'orange', 'yellow', 'red'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+            try {
+                const response = await fetch('/create_event', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        event_name: eventName,
+                        date: eventDate,
+                        time: eventTime,
+                        admin_id: managerData.admin_id,
+                        adminname: managerData.adminname,
+                        color: randomColor
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    events.push(data.event);
+                    renderEvents();
+                    generateCalendar(currentDate);
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('createEventModal'));
+                    modal.hide();
+                    document.getElementById('eventName').value = '';
+                    document.getElementById('eventDate').value = '';
+                    document.getElementById('eventTime').value = '';
+                    document.getElementById('eventManager').value = '';
+                } else {
+                    alert('Failed to create event: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error saving event:', error);
+                alert('Error saving event.');
+            }
+        }
+
+        // Khởi tạo
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Calendar page loading...');
+            await fetchAdmins();
+            await fetchEvents();
+            generateCalendar(currentDate);
+        });
+    </script>
+</body>
+</html>

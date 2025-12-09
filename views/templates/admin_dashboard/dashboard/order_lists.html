@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Lists</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a73e8;
+            padding: 20px 25px;
+            display: block;
+            text-align: center;
+        }
+        .sidebar a {
+            color: #5f6368;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+        }
+        .sidebar h6 {
+            color: #80868b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 15px 25px;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        /* User Profile Styles */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+        }
+        .user-profile .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-profile .user-info .name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .user-profile .user-info .role {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .user-profile .dropdown-icon {
+            color: #6c757d;
+        }
+        /* Filter Form Styles */
+        .filter-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        .filter-form .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        .filter-form .form-group label {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .filter-form .form-group select,
+        .filter-form .form-group input {
+            width: 100%;
+            padding: 5px;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+        .filter-form .btn {
+            font-size: 0.9rem;
+            padding: 5px 15px;
+            height: 38px;
+            align-self: flex-end;
+        }
+        /* Order List Table Styles */
+        .table-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .table-container .table th,
+        .table-container .table td {
+            vertical-align: middle;
+        }
+        .table-container .table .status {
+            width: 100px;
+            display: inline-block;
+            text-align: center;
+            padding: 5px 10px;
+            font-size: 0.85rem;
+        }
+        .table-container .table .actions .btn {
+            font-size: 0.8rem;
+            padding: 5px;
+        }
+        /* Custom Icon Styles */
+        .btn-delivered i {
+            color: #28a745; /* Green for checkmark */
+        }
+        .btn-cancelled i {
+            color: #dc3545; /* Red for X */
+        }
+        /* Flatpickr Custom Styles */
+        .flatpickr-calendar {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-family: 'Arial', sans-serif;
+        }
+        .flatpickr-month {
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px;
+        }
+        .flatpickr-monthDropdown-months,
+        .numInputWrapper {
+            font-size: 1rem;
+            color: #333;
+            background: none;
+            border: none;
+            padding: 0 5px;
+        }
+        .flatpickr-monthDropdown-months:hover,
+        .numInputWrapper:hover {
+            background: none;
+        }
+        .flatpickr-prev-month,
+        .flatpickr-next-month {
+            font-size: 1.2rem;
+            color: #1a73e8;
+        }
+        .flatpickr-prev-month:hover,
+        .flatpickr-next-month:hover {
+            color: #1557b0;
+        }
+        .flatpickr-weekdays {
+            background: #f8f9fa;
+            padding: 5px 0;
+        }
+        .flatpickr-weekday {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .flatpickr-days {
+            padding: 5px;
+        }
+        .flatpickr-day {
+            font-size: 0.9rem;
+            color: #333;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            margin: 2px;
+        }
+        .flatpickr-day:hover {
+            background: #e8f0fe;
+            border: 1px solid #1a73e8;
+        }
+        .flatpickr-day.selected,
+        .flatpickr-day.selected:hover {
+            background: #1a73e8;
+            color: white;
+            border: 1px solid #1a73e8;
+        }
+        .flatpickr-day.today {
+            border: 1px solid #1a73e8;
+            background: #e8f0fe;
+        }
+        .flatpickr-day.disabled {
+            color: #d3d3d3;
+        }
+        /* Style for product list in table */
+        .product-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .product-list li {
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .filter-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-form .form-group {
+                flex: none;
+                min-width: 100%;
+            }
+            .filter-form .btn {
+                align-self: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">DashStack</div>
+        <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' else '' }}"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="{{ url_for('admin_products') }}" class="{{ 'active' if request.endpoint == 'products' else '' }}"><i class="fas fa-box"></i> Products</a>
+        <a href="{{ url_for('favorites') }}" class="{{ 'active' if request.endpoint == 'favorites' else '' }}"><i class="fas fa-heart"></i> Favorites</a>
+        <a href="{{ url_for('inbox') }}" class="{{ 'active' if request.endpoint == 'inbox' else '' }}"><i class="fas fa-inbox"></i> Inbox</a>
+        <a href="{{ url_for('order_lists') }}" class="{{ 'active' if request.endpoint == 'order_lists' else '' }}"><i class="fas fa-list"></i> Order Lists</a>
+        <a href="{{ url_for('product_stock') }}" class="{{ 'active' if request.endpoint == 'product_stock' else '' }}"><i class="fas fa-cubes"></i> Product Stock</a>
+        <a href="{{ url_for('user_management') }}" class="{{ 'active' if request.endpoint == 'user_management' else '' }}"><i class="fas fa-users"></i> User Management</a>
+        <h6>PAGES</h6>
+        <a href="{{ url_for('pricing') }}" class="{{ 'active' if request.endpoint == 'pricing' else '' }}" style="display: none;"><i class="fas fa-money-bill"></i> Pricing</a>
+        <a href="{{ url_for('calendar') }}" class="{{ 'active' if request.endpoint == 'calendar' else '' }}"><i class="fas fa-calendar"></i> Calendar</a>
+        <a href="{{ url_for('to_do_list') }}" class="{{ 'active' if request.endpoint == 'to_do_list' else '' }}"><i class="fas fa-check-circle"></i> To-Do</a>
+        <a href="{{ url_for('contact') }}" class="{{ 'active' if request.endpoint == 'contact' else '' }}"><i class="fas fa-address-book"></i> Contact</a>
+        <a href="{{ url_for('invoices') }}" class="{{ 'active' if request.endpoint == 'invoices' else '' }}"><i class="fas fa-file-invoice"></i> Invoice</a>
+        <a href="{{ url_for('setting') }}" class="{{ 'active' if request.endpoint == 'setting' else '' }}"><i class="fas fa-cog"></i> Settings</a>
+        <a href="{{ url_for('logout') }}" class="{{ 'active' if request.endpoint == 'logout' else '' }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h4>Order Lists</h4>
+            <div class="d-flex align-items-center">
+                <!-- <button class="btn btn-outline-secondary me-2"><i class="fas fa-bell me-1"></i></button> -->
+                <div class="dropdown me-2">
+                    <!-- <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown">
+                        <img src="https://flagcdn.com/16x12/gb.png" alt="Flag" class="me-1"> English
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li><a class="dropdown-item" href="#">Spanish</a></li>
+                        <li><a class="dropdown-item" href="#">French</a></li>
+                    </ul> -->
+                </div>
+                <!-- User Profile -->
+                <div class="user-profile">
+                    <!-- <img src="https://via.placeholder.com/40" alt="Profile"> -->
+                    <div class="user-info">
+                        <span class="name">{{ admin['first_name'] }} {{ admin['last_name'] }}</span>
+                        <span class="role">Admin</span>
+                    </div>
+                    <!-- <i class="fas fa-chevron-down dropdown-icon"></i> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Form -->
+        <div class="filter-form">
+            <div class="form-group">
+                <label for="statusFilter">Status</label>
+                <select id="statusFilter">
+                    <option value="">All</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="text" id="startDate" class="flatpickr-input" value="2025-01-01">
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date</label>
+                <input type="text" id="endDate" class="flatpickr-input" value="2025-12-31">
+            </div>
+            <button class="btn btn-primary" onclick="filterOrders()">Filter</button>
+        </div>
+
+        <!-- Order List Table -->
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5>Order Lists</h5>
+                <button class="btn btn-primary btn-sm" id="newOrderBtn" data-bs-toggle="modal" data-bs-target="#orderModal" onclick="prepareNewOrder()">
+                    <i class="fas fa-plus me-1"></i> New Order
+                </button>
+            </div>
+            <table class="table table-hover" id="orderTable">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Size</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr data-order-id="{{ order.order_id }}" data-status="{{ order.status }}" data-date="{{ order.raw_date }}">
+                        <td>{{ order.order_id }}</td>
+                        <td>{{ order.first_name }} {{ order.last_name }}</td>
+                        <td>
+                            <ul class="product-list">
+                                {% for product in order.product_list %}
+                                <li>{{ product }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="product-list">
+                                {% for size in order.size_list %}
+                                <li>{{ size }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="product-list">
+                                {% for price in order.price_list %}
+                                <li>{{ price | format_currency }} VNĐ</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{ order.order_date }}</td>
+                        <td><span class="badge bg-{{ order.status_color }} status">{{ order.status }}</span></td>
+                        <td class="actions">
+                            <button class="btn btn-sm btn-outline-primary me-1 view-order-btn"
+                                    data-bs-toggle="modal" data-bs-target="#viewOrderModal"
+                                    data-order-id="{{ order.order_id }}"
+                                    data-customer-name="{{ order.first_name }} {{ order.last_name }}"
+                                    data-products='{{ order.product_list | tojson }}'
+                                    data-sizes='{{ order.size_list | tojson }}'
+                                    data-prices='{{ order.price_list | tojson }}'
+                                    data-order-date="{{ order.order_date }}"
+                                    data-status="{{ order.status }}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            {% if order.status == 'Pending' %}
+                            <button class="btn btn-sm btn-outline-success me-1 delivered-order-btn btn-delivered"
+                                    data-order-id="{{ order.order_id }}"
+                                    title="Mark as Delivered">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger cancelled-order-btn btn-cancelled"
+                                    data-order-id="{{ order.order_id }}"
+                                    title="Mark as Cancelled">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- View Order Modal -->
+        <div class="modal fade" id="viewOrderModal" tabindex="-1" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewOrderModalLabel">Order Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Order ID:</strong> <span id="modal-order-id"></span></p>
+                        <p><strong>Customer:</strong> <span id="modal-customer-name"></span></p>
+                        <p><strong>Products:</strong>
+                            <ul id="modal-products" class="product-list"></ul>
+                        </p>
+                        <p><strong>Date:</strong> <span id="modal-order-date"></span></p>
+                        <p><strong>Status:</strong> <span id="modal-status"></span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Modal (New/Edit Order) -->
+        <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderModalLabel">Create New Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="orderForm">
+                            <input type="hidden" id="orderId" name="order_id">
+                            <div class="mb-3">
+                                <label for="customerId" class="form-label">Customer</label>
+                                <select id="customerId" name="customer_id" class="form-select" required>
+                                    <option value="">Select Customer</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="productId" class="form-label">Product</label>
+                                <select id="productId" name="product_id" class="form-select" required>
+                                    <option value="">Select Product</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quantity" class="form-label">Quantity</label>
+                                <input type="number" id="quantity" name="quantity" class="form-control" min="1" value="1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="size" class="form-label">Size</label>
+                                <select id="size" name="size" class="form-select" required>
+                                    <option value="S">S</option>
+                                    <option value="M" selected>M</option>
+                                    <option value="L">L</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="storeId" class="form-label">Store</label>
+                                <select id="storeId" name="store_id" class="form-select" required>
+                                    <option value="">Select Store</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select id="status" name="status" class="form-select" required>
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                    <option value="Processing">Processing</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="saveOrderBtn">Save Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Confirmation Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to logout?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('logout') }}'">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Initialize Flatpickr -->
+    <script>
+        // Khởi tạo Flatpickr cho Start Date và End Date
+        flatpickr("#startDate", {
+            dateFormat: "Y-m-d",
+            defaultDate: "2025-01-01",
+            onChange: function(selectedDates, dateStr) {
+                filterOrders();
+            }
+        });
+
+        flatpickr("#endDate", {
+            dateFormat: "Y-m-d",
+            defaultDate: "2025-12-31",
+            onChange: function(selectedDates, dateStr) {
+                filterOrders();
+            }
+        });
+
+        // Filter Script
+        function filterOrders() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            const start = startDate ? new Date(startDate) : null;
+            const end = endDate ? new Date(endDate) : null;
+            if (end) end.setHours(23, 59, 59, 999);
+
+            const rows = document.querySelectorAll('#orderTable tbody tr');
+
+            rows.forEach(row => {
+                const rowStatus = row.getAttribute('data-status');
+                const rowDate = new Date(row.getAttribute('data-date'));
+
+                const statusMatch = !statusFilter || rowStatus === statusFilter;
+                let dateMatch = true;
+                if (start && rowDate < start) dateMatch = false;
+                if (end && rowDate > end) dateMatch = false;
+
+                if (statusMatch && dateMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // View Order Modal Script
+        document.querySelectorAll('.view-order-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const orderId = button.getAttribute('data-order-id');
+                const customerName = button.getAttribute('data-customer-name');
+                const products = JSON.parse(button.getAttribute('data-products'));
+                const sizes = JSON.parse(button.getAttribute('data-sizes'));
+                const prices = JSON.parse(button.getAttribute('data-prices'));
+                const orderDate = button.getAttribute('data-order-date');
+                const status = button.getAttribute('data-status');
+
+                document.getElementById('modal-order-id').textContent = orderId;
+                document.getElementById('modal-customer-name').textContent = customerName;
+                const productsList = document.getElementById('modal-products');
+                productsList.innerHTML = '';
+                products.forEach((product, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = `${product} (Size: ${sizes[index]}, Price: ${formatCurrency(prices[index])} VNĐ)`;
+                    productsList.appendChild(li);
+                });
+                document.getElementById('modal-order-date').textContent = orderDate;
+                document.getElementById('modal-status').textContent = status;
+            });
+        });
+
+        // Delivered Order Script
+        document.querySelectorAll('.delivered-order-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const orderId = button.getAttribute('data-order-id');
+                if (confirm(`Are you sure you want to mark order ${orderId} as Delivered?`)) {
+                    fetch(`/order/mark_delivered/${orderId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const row = document.querySelector(`tr[data-order-id="${orderId}"]`);
+                            const statusCell = row.querySelector('.status');
+                            statusCell.classList.remove('bg-warning');
+                            statusCell.classList.add('bg-success');
+                            statusCell.textContent = 'Delivered';
+                            row.setAttribute('data-status', 'Delivered');
+                            
+                            // Hide both buttons
+                            const actionCell = row.querySelector('.actions');
+                            actionCell.innerHTML = `
+                                <button class="btn btn-sm btn-outline-primary me-1 view-order-btn"
+                                        data-bs-toggle="modal" data-bs-target="#viewOrderModal"
+                                        data-order-id="${data.order.order_id}"
+                                        data-customer-name="${data.order.first_name} ${data.order.last_name}"
+                                        data-products='${JSON.stringify(data.order.products.map(p => p.product_name + ' x' + p.quantity))}'
+                                        data-sizes='${JSON.stringify(data.order.products.map(p => p.size))}'
+                                        data-prices='${JSON.stringify(data.order.products.map(p => p.total_price))}'
+                                        data-order-date="${data.order.order_date}"
+                                        data-status="${data.order.status}">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            `;
+                            attachEventListeners(row);
+                            alert('Order marked as Delivered!');
+                        } else {
+                            alert('Failed to mark order as Delivered: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error: ' + error.message);
+                    });
+                }
+            });
+        });
+
+        // Cancelled Order Script
+        document.querySelectorAll('.cancelled-order-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const orderId = button.getAttribute('data-order-id');
+                if (confirm(`Are you sure you want to mark order ${orderId} as Cancelled?`)) {
+                    fetch(`/order/mark_cancelled/${orderId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const row = document.querySelector(`tr[data-order-id="${orderId}"]`);
+                            const statusCell = row.querySelector('.status');
+                            statusCell.classList.remove('bg-warning');
+                            statusCell.classList.add('bg-danger');
+                            statusCell.textContent = 'Cancelled';
+                            row.setAttribute('data-status', 'Cancelled');
+                            
+                            // Hide both buttons
+                            const actionCell = row.querySelector('.actions');
+                            actionCell.innerHTML = `
+                                <button class="btn btn-sm btn-outline-primary me-1 view-order-btn"
+                                        data-bs-toggle="modal" data-bs-target="#viewOrderModal"
+                                        data-order-id="${data.order.order_id}"
+                                        data-customer-name="${data.order.first_name} ${data.order.last_name}"
+                                        data-products='${JSON.stringify(data.order.products.map(p => p.product_name + ' x' + p.quantity))}'
+                                        data-sizes='${JSON.stringify(data.order.products.map(p => p.size))}'
+                                        data-prices='${JSON.stringify(data.order.products.map(p => p.total_price))}'
+                                        data-order-date="${data.order.order_date}"
+                                        data-status="${data.order.status}">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            `;
+                            attachEventListeners(row);
+                            alert('Order marked as Cancelled!');
+                        } else {
+                            alert('Failed to mark order as Cancelled: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error: ' + error.message);
+                    });
+                }
+            });
+        });
+
+        // Prepare New Order Modal
+        function prepareNewOrder() {
+            document.getElementById('orderModalLabel').textContent = 'Create New Order';
+            document.getElementById('orderForm').reset();
+            document.getElementById('orderId').value = '';
+            document.getElementById('status').value = 'Pending';
+            document.getElementById('size').value = 'M';
+            updateProductOptions();
+        }
+
+        // Update product options based on selected size
+        function updateProductOptions(selectedProductId = null, selectedSize = 'M') {
+            const productSelect = document.getElementById('productId');
+            const sizeSelect = document.getElementById('size');
+            const currentSize = sizeSelect.value || selectedSize;
+
+            fetch('/order/options')
+                .then(response => response.json())
+                .then(data => {
+                    productSelect.innerHTML = '<option value="">Select Product</option>';
+                    data.products.forEach(product => {
+                        const sizeData = product.sizes.find(s => s.size === currentSize);
+                        if (sizeData) {
+                            const option = document.createElement('option');
+                            option.value = product.product_id;
+                            const discountedPrice = sizeData.price * (1 - (product.discount || 0) / 100);
+                            option.textContent = `${product.product_name} (${formatCurrency(discountedPrice)} VNĐ)`;
+                            option.dataset.price = sizeData.price;
+                            option.dataset.discount = product.discount || 0;
+                            if (product.product_id === selectedProductId) {
+                                option.selected = true;
+                            }
+                            productSelect.appendChild(option);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error loading product options:', error));
+        }
+
+        // Load options for Order form (products, stores, customers)
+        fetch('/order/options')
+            .then(response => response.json())
+            .then(data => {
+                const storeSelect = document.getElementById('storeId');
+                const customerSelect = document.getElementById('customerId');
+
+                data.stores.forEach(store => {
+                    const option = document.createElement('option');
+                    option.value = store.store_id;
+                    option.textContent = store.store_name;
+                    storeSelect.appendChild(option);
+                });
+
+                data.customers.forEach(customer => {
+                    const option = document.createElement('option');
+                    option.value = customer.customer_id;
+                    option.textContent = `${customer.first_name} ${customer.last_name}`;
+                    customerSelect.appendChild(option);
+                });
+
+                updateProductOptions();
+            })
+            .catch(error => console.error('Error loading options:', error));
+
+        // Update product prices when size changes
+        document.getElementById('size').addEventListener('change', () => {
+            const productSelect = document.getElementById('productId');
+            const selectedProductId = productSelect.value;
+            updateProductOptions(selectedProductId);
+        });
+
+        // Format currency for product options
+        function formatCurrency(value) {
+            return (value || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Save Order (New or Edit)
+        document.getElementById('saveOrderBtn').addEventListener('click', () => {
+            const form = document.getElementById('orderForm');
+            if (form.checkValidity()) {
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+                const isEdit = !!data.order_id;
+                const url = isEdit ? `/order/update/${data.order_id}` : '/order/create';
+                const method = 'POST';
+
+                fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const tbody = document.querySelector('#orderTable tbody');
+                        if (isEdit) {
+                            const row = document.querySelector(`tr[data-order-id="${data.order.order_id}"]`);
+                            if (row) {
+                                row.setAttribute('data-status', data.order.status);
+                                row.setAttribute('data-date', data.order.raw_date);
+                                row.innerHTML = `
+                                    <td>${data.order.order_id}</td>
+                                    <td>${data.order.first_name} ${data.order.last_name}</td>
+                                    <td>
+                                        <ul class="product-list">
+                                            ${data.order.products.map(p => `<li>${p.product_name} x${p.quantity}</li>`).join('')}
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul class="product-list">
+                                            ${data.order.products.map(p => `<li>${p.size}</li>`).join('')}
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul class="product-list">
+                                            ${data.order.products.map(p => `<li>${formatCurrency(p.total_price)} VNĐ</li>`).join('')}
+                                        </ul>
+                                    </td>
+                                    <td>${data.order.order_date}</td>
+                                    <td><span class="badge bg-${data.order.status_color} status">${data.order.status}</span></td>
+                                    <td class="actions">
+                                        <button class="btn btn-sm btn-outline-primary me-1 view-order-btn"
+                                                data-bs-toggle="modal" data-bs-target="#viewOrderModal"
+                                                data-order-id="${data.order.order_id}"
+                                                data-customer-name="${data.order.first_name} ${data.order.last_name}"
+                                                data-products='${JSON.stringify(data.order.products.map(p => p.product_name + ' x' + p.quantity))}'
+                                                data-sizes='${JSON.stringify(data.order.products.map(p => p.size))}'
+                                                data-prices='${JSON.stringify(data.order.products.map(p => p.total_price))}'
+                                                data-order-date="${data.order.order_date}"
+                                                data-status="${data.order.status}">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        ${data.order.status === 'Pending' ? `
+                                        <button class="btn btn-sm btn-outline-success me-1 delivered-order-btn btn-delivered"
+                                                data-order-id="${data.order.order_id}"
+                                                title="Mark as Delivered">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger cancelled-order-btn btn-cancelled"
+                                                data-order-id="${data.order.order_id}"
+                                                title="Mark as Cancelled">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                        ` : ''}
+                                    </td>
+                                `;
+                                attachEventListeners(row);
+                            }
+                        } else {
+                            const tr = document.createElement('tr');
+                            tr.setAttribute('data-order-id', data.order.order_id);
+                            tr.setAttribute('data-status', data.order.status);
+                            tr.setAttribute('data-date', data.order.raw_date);
+                            tr.innerHTML = `
+                                <td>${data.order.order_id}</td>
+                                <td>${data.order.first_name} ${data.order.last_name}</td>
+                                <td>
+                                    <ul class="product-list">
+                                        ${data.order.products.map(p => `<li>${p.product_name} x${p.quantity}</li>`).join('')}
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="product-list">
+                                        ${data.order.products.map(p => `<li>${p.size}</li>`).join('')}
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="product-list">
+                                        ${data.order.products.map(p => `<li>${formatCurrency(p.total_price)} VNĐ</li>`).join('')}
+                                    </ul>
+                                </td>
+                                <td>${data.order.order_date}</td>
+                                <td><span class="badge bg-${data.order.status_color} status">${data.order.status}</span></td>
+                                <td class="actions">
+                                    <button class="btn btn-sm btn-outline-primary me-1 view-order-btn"
+                                            data-bs-toggle="modal" data-bs-target="#viewOrderModal"
+                                            data-order-id="${data.order.order_id}"
+                                            data-customer-name="${data.order.first_name} ${data.order.last_name}"
+                                            data-products='${JSON.stringify(data.order.products.map(p => p.product_name + ' x' + p.quantity))}'
+                                            data-sizes='${JSON.stringify(data.order.products.map(p => p.size))}'
+                                            data-prices='${JSON.stringify(data.order.products.map(p => p.total_price))}'
+                                            data-order-date="${data.order.order_date}"
+                                            data-status="${data.order.status}">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    ${data.order.status === 'Pending' ? `
+                                    <button class="btn btn-sm btn-outline-success me-1 delivered-order-btn btn-delivered"
+                                            data-order-id="${data.order.order_id}"
+                                            title="Mark as Delivered">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger cancelled-order-btn btn-cancelled"
+                                            data-order-id="${data.order.order_id}"
+                                            title="Mark as Cancelled">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    ` : ''}
+                                </td>
+                            `;
+                            tbody.prepend(tr);
+                            attachEventListeners(tr);
+                        }
+
+                        form.reset();
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('orderModal'));
+                        modal.hide();
+                        alert(isEdit ? 'Order updated successfully!' : 'Order created successfully!');
+                    } else {
+                        alert(`Failed to ${isEdit ? 'update' : 'create'} order: ${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    alert('Error: ' + error.message);
+                });
+            } else {
+                form.reportValidity();
+            }
+        });
+
+        // Gắn sự kiện cho nút View, Delivered, Cancelled mới
+        function attachEventListeners(row) {
+            const viewBtn = row.querySelector('.view-order-btn');
+            const deliveredBtn = row.querySelector('.delivered-order-btn');
+            const cancelledBtn = row.querySelector('.cancelled-order-btn');
+
+            viewBtn.addEventListener('click', () => {
+                const button = viewBtn;
+                document.getElementById('modal-order-id').textContent = button.getAttribute('data-order-id');
+                document.getElementById('modal-customer-name').textContent = button.getAttribute('data-customer-name');
+                const products = JSON.parse(button.getAttribute('data-products'));
+                const sizes = JSON.parse(button.getAttribute('data-sizes'));
+                const prices = JSON.parse(button.getAttribute('data-prices'));
+                const productsList = document.getElementById('modal-products');
+                productsList.innerHTML = '';
+                products.forEach((product, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = `${product} (Size: ${sizes[index]}, Price: ${formatCurrency(prices[index])} VNĐ)`;
+                    productsList.appendChild(li);
+                });
+                document.getElementById('modal-order-date').textContent = button.getAttribute('data-order-date');
+                document.getElementById('modal-status').textContent = button.getAttribute('data-status');
+            });
+
+            if (deliveredBtn) {
+                deliveredBtn.addEventListener('click', () => {
+                    const orderId = deliveredBtn.getAttribute('data-order-id');
+                    if (confirm(`Are you sure you want to mark order ${orderId} as Delivered?`)) {
+                        fetch(`/order/mark_delivered/${orderId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const statusCell = row.querySelector('.status');
+                                statusCell.classList.remove('bg-warning');
+                                statusCell.classList.add('bg-success');
+                                statusCell.textContent = 'Delivered';
+                                row.setAttribute('data-status', 'Delivered');
+                                
+                                // Hide both buttons
+                                const actionCell = row.querySelector('.actions');
+                                actionCell.innerHTML = `
+                                    <button class="btn btn-sm btn-outline-primary me-1 view-order-btn"
+                                            data-bs-toggle="modal" data-bs-target="#viewOrderModal"
+                                            data-order-id="${data.order.order_id}"
+                                            data-customer-name="${data.order.first_name} ${data.order.last_name}"
+                                            data-products='${JSON.stringify(data.order.products.map(p => p.product_name + ' x' + p.quantity))}'
+                                            data-sizes='${JSON.stringify(data.order.products.map(p => p.size))}'
+                                            data-prices='${JSON.stringify(data.order.products.map(p => p.total_price))}'
+                                            data-order-date="${data.order.order_date}"
+                                            data-status="${data.order.status}">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                `;
+                                attachEventListeners(row);
+                                alert('Order marked as Delivered!');
+                            } else {
+                                alert('Failed to mark order as Delivered: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            alert('Error: ' + error.message);
+                        });
+                    }
+                });
+            }
+
+            if (cancelledBtn) {
+                cancelledBtn.addEventListener('click', () => {
+                    const orderId = cancelledBtn.getAttribute('data-order-id');
+                    if (confirm(`Are you sure you want to mark order ${orderId} as Cancelled?`)) {
+                        fetch(`/order/mark_cancelled/${orderId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const statusCell = row.querySelector('.status');
+                                statusCell.classList.remove('bg-warning');
+                                statusCell.classList.add('bg-danger');
+                                statusCell.textContent = 'Cancelled';
+                                row.setAttribute('data-status', 'Cancelled');
+                                
+                                // Hide both buttons
+                                const actionCell = row.querySelector('.actions');
+                                actionCell.innerHTML = `
+                                    <button class="btn btn-sm btn-outline-primary me-1 view-order-btn"
+                                            data-bs-toggle="modal" data-bs-target="#viewOrderModal"
+                                            data-order-id="${data.order.order_id}"
+                                            data-customer-name="${data.order.first_name} ${data.order.last_name}"
+                                            data-products='${JSON.stringify(data.order.products.map(p => p.product_name + ' x' + p.quantity))}'
+                                            data-sizes='${JSON.stringify(data.order.products.map(p => p.size))}'
+                                            data-prices='${JSON.stringify(data.order.products.map(p => p.total_price))}'
+                                            data-order-date="${data.order.order_date}"
+                                            data-status="${data.order.status}">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                `;
+                                attachEventListeners(row);
+                                alert('Order marked as Cancelled!');
+                            } else {
+                                alert('Failed to mark order as Cancelled: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            alert('Error: ' + error.message);
+                        });
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

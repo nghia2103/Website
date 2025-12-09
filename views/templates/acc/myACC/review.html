@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review Product</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #ffffff;
+        font-family: 'Azeret Mono', monospace;
+      }
+      .navbar {
+        font-family: 'Azeret Mono', Arial, Helvetica, sans-serif;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: transparent;
+        position: sticky;
+        top: 0;
+        z-index: 9999;
+        width: 100%;
+        box-sizing: border-box;
+        transition: transform 0.3s ease;
+      }
+      .navbar.hidden {
+        transform: translateY(-100%);
+      }
+      .navbar-left {
+        font-size: 24px;
+        font-weight: bold;
+        color: #000;
+        padding: 8px 16px;
+        z-index: 10000;
+      }
+      .navbar-center {
+        display: flex;
+        gap: 15px;
+        z-index: 10000;
+      }
+      .navbar-center a {
+        text-decoration: none;
+        color: #000;
+        font-size: 16px;
+        padding: 8px 16px;
+        border: 1px solid #000;
+        border-radius: 20px;
+        background-color: rgb(255, 255, 255);
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      }
+      .navbar-center a:hover {
+        background-color: #000;
+        color: #fff;
+        border-color: #fff;
+      }
+      .navbar-center .active {
+        background-color: rgb(255, 255, 255);
+        color: #000;
+        border: 1px solid #000;
+      }
+      .navbar-center .active:hover {
+        background-color: #000;
+        color: #fff;
+        border-color: #fff;
+      }
+      .navbar-center .nav-account {
+        background-color: black;
+        color: white;
+      }
+      .navbar-right {
+        display: flex;
+        gap: 15px;
+        z-index: 10000;
+      }
+      .navbar-right a {
+        text-decoration: none;
+        color: #000;
+        font-size: 16px;
+        padding: 8px 16px;
+        border: 1px solid #000;
+        border-radius: 20px;
+        background-color: rgb(255, 255, 255);
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      }
+      .navbar-right a:hover {
+        background-color: #000;
+        color: #fff;
+        border-color: #fff;
+      }
+      .navbar-right .highlight {
+        background-color: rgb(255, 255, 255);
+        border: 1px solid #000;
+      }
+      .navbar-right .highlight:hover {
+        background-color: #000;
+        color: #fff;
+        border-color: #fff;
+      }
+      .nav-tabs {
+        border: none;
+      }
+      .nav-link {
+        color: #000;
+        border-bottom: none;
+        transition: border-bottom 0.3s;
+      }
+      .nav-link.active {
+        color: #000;
+        border: none;
+        border-bottom: 2px solid rgb(106, 122, 0);
+      }
+      .nav-link:hover {
+        border-bottom: 2px solid rgb(106, 122, 0);
+        opacity: 0.5;
+      }
+      .btn-custom-button {
+        background-color: rgb(106, 122, 0);
+        color: #fff;
+        border-radius: 0;
+      }
+      .btn-custom-button:hover {
+        text-decoration: underline;
+        color: white;
+        background-color: rgb(106, 122, 0);
+      }
+      .btn-custom-discard {
+        background-color: #fff3cd;
+        color: #000;
+        border: 1px solid #ffeeba;
+        border-radius: 0;
+      }
+      .btn-custom-discard:hover {
+        text-decoration: underline;
+        background-color: #fff3cd;
+        color: #000;
+        border: 1px solid #ffeeba;
+      }
+      .card {
+        border-width: 1px 0 1px 0;
+        border-style: solid;
+        border-color: #ccc;
+        border-radius: 0;
+        padding: 20px;
+      }
+      .form-label {
+        font-weight: 600;
+      }
+      .star-rating {
+        direction: rtl;
+        display: inline-flex;
+        font-size: 2em;
+        cursor: pointer;
+      }
+      .star-rating input {
+        display: none;
+      }
+      .star-rating label {
+        color: #ccc;
+      }
+      .star-rating input:checked ~ label,
+      .star-rating label:hover,
+      .star-rating label:hover ~ label {
+        color: #ffc107;
+      }
+      .footer {
+        margin-top: 20px;
+        padding: 40px;
+        background-color: #d4e157;
+      }
+      .footer-main {
+        color: black;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+      }
+      .footer-left h1 {
+        padding-top: 48px;
+        font-family: Arial, sans-serif;
+        color: black;
+        font-size: 80px;
+        font-weight: 900;
+      }
+      .star-icon {
+        width: 68px;
+        height: 68px;
+        object-fit: contain;
+        margin-bottom: 10px;
+        animation: rotate360 5s linear infinite;
+      }
+      @keyframes rotate360 {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .footer-center ul {
+          list-style: none;
+          padding: 0;
+          font-size: 14px;
+      }
+
+      .footer-center li {
+          margin: 5px 0;
+      }
+      .footer-center a {
+        text-decoration: none;
+        font-family: 'Azeret Mono', Arial, Helvetica, sans-serif;
+        color: black
+      }
+      .footer-center a:hover {
+        text-decoration: underline;
+      }
+      .footer-right p {
+        font-size: 14px;
+        margin: 5px 0;
+      }
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        flex-wrap: wrap;
+        border-top: 1px solid rgb(0, 0, 0);
+        padding-top: 20px;
+      }
+      .social-icons {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+      .icon-circle {
+        background-color: black;
+        color: #d4e157;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        text-decoration: none;
+        transition: transform 0.3s, background-color 0.3s;
+      }
+      .icon-circle i {
+        font-size: 16px;
+      }
+      .footer-links a {
+        margin-right: 15px;
+        text-decoration: none;
+        color: black;
+      }
+      .footer-right,
+      .footer-center {
+        font-family: azeret-mono, "azeret mono", monospace;
+      }
+      .footer-center {
+        padding-top: 60px;
+      }
+      .image-preview {
+        max-width: 200px;
+        max-height: 200px;
+        margin-top: 10px;
+        display: none;
+      }
+      @media (min-width: 768px) {
+        .footer-right {
+          padding-right: 100px;
+          padding-top: 50px
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">DONKIES</div>
+        <div class="navbar-center">
+            <a href="/" class="nav-home">HOME</a>
+            <a href="/#about-section" class="nav-about">ABOUT</a>
+            <a href="/products" class="nav-products">PRODUCTS</a>
+            <a href="/#gallery-wrapper" class="nav-media">MEDIA</a>
+            {% if session.customer_id %}
+                <a href="/acc/myACC/my_account.html" class="nav-account active">myACCOUNT</a>
+            {% else %}
+                <a href="/login" class="nav-account">myACCOUNT</a>
+            {% endif %}
+        </div>
+        <div class="navbar-right">
+            {% if session.customer_id %}
+                <a href="/logout" class="nav-logout highlight">LOGOUT</a>
+            {% else %}
+                <a href="/login" class="nav-login highlight">LOGIN</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+      <h2>Review Product</h2>
+      <p class="text-muted">Share your feedback about the product.</p>
+      <div class="card">
+        <form id="reviewForm" enctype="multipart/form-data">
+          <input type="hidden" id="productId" name="productId">
+          <input type="hidden" id="sizeId" name="sizeId">
+          <input type="hidden" id="orderId" name="orderId">
+          <div class="mb-3">
+            <label for="productName" class="form-label">Product Name</label>
+            <input type="text" class="form-control" id="productName" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="rating" class="form-label">Rating</label>
+            <div class="star-rating">
+              <input type="radio" id="star5" name="rating" value="5" required>
+              <label for="star5">★</label>
+              <input type="radio" id="star4" name="rating" value="4">
+              <label for="star4">★</label>
+              <input type="radio" id="star3" name="rating" value="3">
+              <label for="star3">★</label>
+              <input type="radio" id="star2" name="rating" value="2">
+              <label for="star2">★</label>
+              <input type="radio" id="star1" name="rating" value="1">
+              <label for="star1">★</label>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="comment" class="form-label">Comment</label>
+            <textarea class="form-control" id="comment" name="comment" rows="4" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="reviewImage" class="form-label">Upload Image (Optional)</label>
+            <input type="file" class="form-control" id="reviewImage" name="reviewImage" accept="image/png, image/jpeg">
+            <img id="imagePreview" class="image-preview" alt="Image Preview">
+          </div>
+          <button type="submit" class="btn btn-custom-button">Submit Review</button>
+          <a href="/acc/myACC/my_order.html" class="btn btn-custom-discard ms-2">Cancel</a>
+        </form>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <footer class="footer">
+      <div class="footer-main">
+        <div class="footer-left">
+          <h1>DONKIES <img src="{{ url_for('serve_assets', filename='logo2.png') }}" alt="star icon" class="star-icon"></h1>
+        </div>
+        <div class="footer-center">
+          <ul>
+            <li><a href="{{ url_for('index') }}">HOME</a></li>
+            <li><a href="{{ url_for('index') }}#about-section">ABOUT</a></li>
+            <li><a href="{{ url_for('products_user') }}">PRODUCTS</a></li>
+            <li><a href="{{ url_for('index') }}#gallery-wrapper">MEDIA</a></li>
+            <li><a href="{{ url_for('my_account') }}">myACCOUNT</a></li>
+          </ul>
+        </div>
+        <div class="footer-right">
+          <p>ABC@GMAIL.COM</p>
+          <p>123-456-7890</p>
+          <p>123 HAI BA TRUNG</p>
+          <p>DONG DA, HA NOI</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="social-icons">
+          <a href="#" class="icon-circle"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="icon-circle"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="icon-circle"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="icon-circle"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <div class="footer-links">
+          <a href="{{ url_for('serve_assets', filename='privacy.html') }}">Privacy Policy</a>
+          <a href="{{ url_for('serve_assets', filename='privacy.html') }}">Accessibility Statement</a>
+        </div>
+        <div class="copyright">
+          © 2025 by G2 vo dich.
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/6026c58141.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Navbar scroll behavior
+      let lastScrollTop = 0;
+      let hideTimeout = null;
+
+      window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.navbar');
+        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (hideTimeout) {
+          clearTimeout(hideTimeout);
+        }
+
+        if (currentScrollTop < lastScrollTop) {
+          navbar.classList.remove('hidden');
+        } else if (currentScrollTop > lastScrollTop && currentScrollTop > 0) {
+          hideTimeout = setTimeout(() => {
+            navbar.classList.add('hidden');
+          }, 500);
+        }
+
+        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+      });
+
+      // Image preview
+      const reviewImageInput = document.getElementById('reviewImage');
+      const imagePreview = document.getElementById('imagePreview');
+
+      reviewImageInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        } else {
+          imagePreview.style.display = 'none';
+          imagePreview.src = '';
+        }
+      });
+
+      // Get URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('product_id');
+      const sizeId = urlParams.get('size_id');
+      const orderId = urlParams.get('order_id');
+      const productName = decodeURIComponent(urlParams.get('product_name') || '');
+
+      // Populate form fields
+      document.getElementById('productId').value = productId || '';
+      document.getElementById('sizeId').value = sizeId || '';
+      document.getElementById('orderId').value = orderId || '';
+      document.getElementById('productName').value = productName || '';
+
+      // Check if review already exists and validate parameters
+      async function checkReview() {
+          if (!productId || !sizeId || !orderId) {
+              alert('Missing required parameters (product_id, size_id, or order_id).');
+              window.location.href = '/acc/myACC/my_order.html';
+              return;
+          }
+
+          try {
+              // Kiểm tra sản phẩm và kích cỡ
+              const productResponse = await fetch(`/api/products/${productId}`, {
+                  method: 'GET',
+                  credentials: 'include'
+              });
+              if (!productResponse.ok) {
+                  alert('Sản phẩm không tồn tại.');
+                  window.location.href = '/acc/myACC/my_order.html';
+                  return;
+              }
+
+              // Kiểm tra đơn hàng
+              const orderResponse = await fetch(`/api/orders`, {
+                  method: 'GET',
+                  credentials: 'include'
+              });
+              const orders = await orderResponse.json();
+              const orderExists = orders.some(order => 
+                  order.order_id === orderId && 
+                  order.status === 'Delivered' &&
+                  order.products.some(product => 
+                      product.product_id === productId && product.size_id === sizeId
+                  )
+              );
+              if (!orderExists) {
+                  alert('Đơn hàng không hợp lệ hoặc chưa được giao.');
+                  window.location.href = '/acc/myACC/my_order.html';
+                  return;
+              }
+
+              // Kiểm tra đánh giá đã tồn tại
+              const reviewResponse = await fetch(`/api/reviews?product_id=${productId}&size_id=${sizeId}&order_id=${orderId}`, {
+                  method: 'GET',
+                  credentials: 'include'
+              });
+              const result = await reviewResponse.json();
+              if (result.review_id) {
+                  alert('You have already reviewed this product for this order.');
+                  window.location.href = '/acc/myACC/my_order.html';
+              }
+          } catch (error) {
+              console.error('Error checking review:', error);
+              alert('Error checking review status. Please try again.');
+              window.location.href = '/acc/myACC/my_order.html';
+          }
+      }
+
+      // Validate parameters on page load
+      if (productId && sizeId && orderId) {
+          checkReview();
+      } else {
+          alert('Missing required parameters (product_id, size_id, or order_id).');
+          window.location.href = '/acc/myACC/my_order.html';
+      }
+
+      // Handle form submission
+      document.getElementById('reviewForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const rating = document.querySelector('input[name="rating"]:checked')?.value;
+        const comment = document.getElementById('comment').value.trim();
+        const productId = document.getElementById('productId').value;
+        const sizeId = document.getElementById('sizeId').value;
+        const orderId = document.getElementById('orderId').value;
+        const reviewImage = document.getElementById('reviewImage').files[0];
+
+        if (!rating) {
+          alert('Please select a rating.');
+          return;
+        }
+        if (!comment) {
+          alert('Please provide a comment.');
+          return;
+        }
+        if (!productId || !sizeId || !orderId) {
+          alert('Invalid product ID, size ID, or order ID.');
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('size_id', sizeId);
+        formData.append('order_id', orderId);
+        formData.append('rating', parseInt(rating));
+        formData.append('comment', comment);
+        if (reviewImage) {
+          formData.append('reviewImage', reviewImage);
+        }
+
+        try {
+          const response = await fetch('/api/reviews', {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+            alert('Review submitted successfully!');
+            window.location.href = '/acc/myACC/my_order.html';
+          } else {
+            alert(`Error: ${result.error || 'Unable to submit review.'}`);
+          }
+        } catch (error) {
+          console.error('Error submitting review:', error);
+          alert('Error submitting review. Please try again.');
+        }
+      });
+    </script>
+  </body>
+</html>
