@@ -1,8 +1,8 @@
 # Website
 Coffee Website
 User:
-john@example.com
-password
+acc: john@example.com
+pwd: password
 Admin:
-alice.nguyen@example.com
-password
+acc: alice.nguyen@example.com
+pwd: password
